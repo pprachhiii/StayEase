@@ -11,5 +11,5 @@ const offsetLng = lng + (Math.random() - 0.5) * 0.01;
 
 L.marker([offsetLat, offsetLng])
   .addTo(map)
-  .bindPopup("Exact location shown after booking.")
+  .bindPopup("Exact location shared after booking.")
   .openPopup();
