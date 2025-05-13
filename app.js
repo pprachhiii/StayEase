@@ -45,13 +45,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Session configuration
 const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
-  crypto: {
-    secret: process.env.SESSION_SECRET_KEY || "thisshouldbeabettersecret",
-  },
   touchAfter: 24 * 3600, // time period in seconds
-});
-sessionStore.on("error", (err) => {
-  console.error("Session Store Error:", err);
 });
 
 const sessionOptions = {
