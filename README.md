@@ -82,6 +82,20 @@
 - **Advanced Search**: Include price ranges, ratings, availability filters, etc.
 - **Improved UX**: Add animations, form validation, loading indicators, and accessibility features.
 
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please fork the repository, create a branch, and open a pull request with your changes.
+
+---
+
+## 📌 Additional Notes
+
+- Ensure MongoDB is properly set up (e.g., using MongoDB Atlas or a local MongoDB instance).
+- The backend API must be running before the frontend is accessible for real-time messaging.
+- Make sure that the `.env` file contains the correct values for the MongoDB URI and JWT secret.
