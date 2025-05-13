@@ -9,13 +9,7 @@ const {
 const { createReview, deleteReview } = require("../controllers/review");
 
 // Create a review
-router.post(
-  "/",
-  isLoggedIn,
-  validateReview,
-  isReviewAuthor,
-  wrapAsync(createReview)
-);
+router.post("/", isLoggedIn, validateReview, wrapAsync(createReview));
 
 // Delete a review
 router.delete("/:reviewId", isReviewAuthor, wrapAsync(deleteReview));

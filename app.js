@@ -1,7 +1,4 @@
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
-
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -47,7 +44,6 @@ const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
   touchAfter: 24 * 3600, // time period in seconds
 });
-
 const sessionOptions = {
   store: sessionStore,
   secret: process.env.SESSION_SECRET_KEY || "thisshouldbeabettersecret",
@@ -55,7 +51,7 @@ const sessionOptions = {
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.USE_SECURE_COOKIE === "true",
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
