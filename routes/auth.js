@@ -17,12 +17,16 @@ router
   .route("/login")
   .get(showLoginForm)
   .post(
-    saveRedirectUrl, 
+    saveRedirectUrl,
     passport.authenticate("local", {
       failureFlash: true,
       failureRedirect: "/login",
     }),
-    loginUser
+    (req, res) => {
+      const redirectUrl = req.session.returnTo || "/";
+      delete req.session.returnTo;
+      res.redirect(redirectUrl);
+    }
   );
 
 // Logout Route
