@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Almanac — Loft above the old print works, Porto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FCF3E8; --pink:#F5C6D6; --pink-soft:#F9DCE6; --pink-deep:#EDA9C4;
+    --mocha:#7B5240; --mocha-deep:#5A3B2E; --peach:#EFAF8B; --white:#FFFFFF;
+    --display:"Baloo 2", "Quicksand", sans-serif; --sans:"Quicksand", -apple-system, sans-serif;
+    --ease: cubic-bezier(.22,.61,.36,1); --bounce: cubic-bezier(.34,1.56,.64,1); --header-h:78px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--cream);color:var(--mocha-deep);font-family:var(--sans);font-weight:600;line-height:1.55;}
+  img{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit;}
+  a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var(--mocha-deep);outline-offset:2px;border-radius:4px;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important;transition-duration:.001ms !important; scroll-behavior:auto !important;} }
+  .wrap{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+  header{position:sticky;top:0;z-index:60;background:var(--pink);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;height:var(--header-h);}
+  .logo{font-family:var(--display);font-size:26px;font-weight:800;color:var(--mocha-deep);}
+  .nav-pills{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.45);border-radius:30px;padding:6px;}
+  .nav-pills a{font-size:13px;font-weight:700;color:var(--mocha-deep);padding:9px 16px;border-radius:24px;transition:background .2s var(--ease);text-transform:uppercase;letter-spacing:0.03em;}
+  .nav-pills a:hover,.nav-pills a.active{background:var(--white);}
+  .nav-right{display:flex;align-items:center;gap:14px;}
+  .btn-order{background:var(--mocha-deep);color:var(--cream);font-size:12.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;padding:12px 22px;border-radius:24px;transition:background .2s var(--ease), transform .18s var(--bounce);}
+  .btn-order:hover{background:var(--mocha);transform:translateY(-2px);}
+  @media (max-width:900px){.nav-pills{display:none;}}
+
+  .title-bar{padding:30px 0 18px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;}
+  h1.p-title{font-family:var(--display);font-size:clamp(26px,3vw,36px);font-weight:800;margin:0 0 8px;}
+  .p-meta{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:700;color:var(--mocha);flex-wrap:wrap;}
+  .p-meta .rating{display:flex;align-items:center;gap:5px;color:var(--mocha-deep);}
+  .p-meta svg.star{width:12px;height:12px;fill:var(--mocha-deep);}
+  .p-meta .dot{width:4px;height:4px;border-radius:50%;background:var(--pink-deep);}
+  .title-actions{display:flex;gap:10px;}
+  .icon-btn{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:700;padding:9px 14px;border-radius:20px;background:var(--pink-soft);transition:transform .18s var(--bounce);}
+  .icon-btn:hover{transform:translateY(-2px);background:var(--pink-deep);}
+  .icon-btn svg{width:16px;height:16px;}
+
+  .gallery{display:grid;grid-template-columns:1.4fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;border-radius:24px;overflow:hidden;height:440px;position:relative;border:4px solid var(--white);}
+  .gallery .g-main{grid-row:1/3;}
+  .gallery img{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:transform .5s var(--ease);}
+  .gallery a{overflow:hidden;display:block;height:100%;}
+  .show-all-btn{position:absolute;bottom:20px;right:20px;background:var(--white);border:2px solid var(--pink-deep);border-radius:22px;padding:9px 18px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;box-shadow:0 2px 8px rgba(90,59,46,0.15);}
+  .show-all-btn:hover{background:var(--pink-soft);}
+  .gallery-sticker{position:absolute;top:20px;left:20px;background:var(--peach);color:var(--mocha-deep);font-family:var(--display);font-size:16px;font-weight:700;padding:6px 16px;border-radius:20px;z-index:2;box-shadow:0 3px 8px rgba(90,59,46,0.15);}
+  @media (max-width:820px){
+    .gallery{grid-template-columns:1fr;grid-template-rows:none;height:320px;}
+    .gallery a:not(.g-main){display:none;}
+    .gallery .g-main{grid-row:auto;}
+  }
+
+  .detail-layout{display:grid;grid-template-columns:1fr 380px;gap:64px;padding:44px 0 90px;align-items:start;}
+  @media (max-width:980px){.detail-layout{grid-template-columns:1fr;}}
+
+  section.block{padding:32px 0;border-bottom:3px solid var(--pink-soft);}
+  section.block:first-child{padding-top:0;}
+  h2.block-title{font-family:var(--display);font-size:24px;font-weight:800;margin:0 0 16px;}
+
+  .quick-facts{display:flex;flex-direction:column;gap:2px;font-size:15px;font-weight:600;}
+  .quick-facts b{font-weight:800;}
+
+  .desc-text{font-size:15.5px;font-weight:600;max-width:640px;}
+  .desc-text p{margin:0 0 14px;}
+  .desc-text.collapsed{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}
+  .show-more{margin-top:12px;font-size:14.5px;font-weight:800;color:var(--mocha-deep);border-bottom:2px solid var(--mocha-deep);padding-bottom:1px;}
+
+  .amenity-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px;}
+  .amenity{display:flex;align-items:center;gap:14px;font-size:15px;font-weight:700;}
+  .amenity svg{width:22px;height:22px;stroke:var(--mocha-deep);fill:none;stroke-width:1.6;flex-shrink:0;}
+
+  .review-summary{display:flex;align-items:center;gap:28px;margin-bottom:28px;}
+  .review-score{font-family:var(--display);font-size:52px;font-weight:800;line-height:1;color:var(--mocha-deep);}
+  .review-score-sub{font-size:14px;font-weight:700;color:var(--pink-deep);-webkit-text-stroke:0.5px var(--mocha-deep);margin-top:6px;}
+  .cat-bars{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px 30px;}
+  .cat-row{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:700;}
+  .cat-row .cat-name{width:110px;flex-shrink:0;color:var(--mocha);}
+  .cat-track{flex:1;height:5px;background:var(--pink-soft);border-radius:3px;position:relative;}
+  .cat-fill{position:absolute;top:0;left:0;height:100%;background:var(--mocha-deep);border-radius:3px;}
+  .cat-row .cat-val{width:26px;text-align:right;font-weight:800;}
+
+  .review-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .review-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+  .review-avatar{width:38px;height:38px;border-radius:50%;background:var(--pink);border:2px solid var(--white);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:15px;font-weight:700;color:var(--mocha-deep);}
+  .review-name{font-size:14.5px;font-weight:800;}
+  .review-date{font-size:12.5px;color:var(--mocha);opacity:0.7;font-weight:600;}
+  .review-text{font-size:14.5px;font-weight:600;}
+  .show-all-reviews{margin-top:26px;border:2px solid var(--mocha-deep);border-radius:20px;padding:11px 22px;font-size:14px;font-weight:800;transition:transform .18s var(--bounce);}
+  .show-all-reviews:hover{background:var(--pink-soft);transform:translateY(-2px);}
+
+  .loc-map{aspect-ratio:16/8;border-radius:20px;overflow:hidden;background:var(--pink);margin-bottom:22px;position:relative;border:3px solid var(--white);}
+  .loc-map svg{width:100%;height:100%;display:block;}
+  .loc-pin{position:absolute;top:48%;left:50%;transform:translate(-50%,-100%);background:var(--mocha-deep);color:var(--cream);padding:7px 12px;border-radius:16px;font-family:var(--display);font-size:13px;font-weight:700;}
+  .nearby-item{display:flex;justify-content:space-between;padding:14px 0;border-bottom:2px solid var(--pink-soft);font-size:14.5px;font-weight:700;}
+  .nearby-item:last-child{border-bottom:none;}
+  .nearby-cat{color:var(--mocha);font-size:13px;opacity:0.75;}
+
+  .policy-item{border-bottom:2px solid var(--pink-soft);}
+  .policy-item:last-child{border-bottom:none;}
+  .policy-head{width:100%;display:flex;justify-content:space-between;align-items:center;padding:18px 0;font-size:15.5px;font-weight:800;}
+  .policy-head svg{width:14px;height:14px;transition:transform .25s var(--ease);}
+  .policy-item.open .policy-head svg{transform:rotate(180deg);}
+  .policy-body{max-height:0;overflow:hidden;transition:max-height .3s var(--ease);}
+  .policy-item.open .policy-body{max-height:220px;}
+  .policy-body p{margin:0 0 18px;font-size:14.5px;color:var(--mocha);font-weight:600;max-width:560px;}
+  .policy-body ul{margin:0 0 18px;padding-left:18px;font-size:14.5px;color:var(--mocha);font-weight:600;}
+  .policy-body li{margin-bottom:6px;}
+
+  .booking-panel{position:sticky;top:calc(var(--header-h) + 24px);border:3px solid var(--pink-deep);border-radius:22px;padding:26px;background:var(--white);box-shadow:0 12px 30px rgba(90,59,46,0.1);}
+  .bp-price{display:flex;align-items:baseline;gap:6px;font-family:var(--display);font-size:22px;font-weight:800;margin-bottom:4px;}
+  .bp-price span{font-size:13px;color:var(--mocha);font-weight:700;}
+  .bp-rating{display:flex;align-items:center;gap:5px;font-size:13.5px;font-weight:700;margin-bottom:18px;}
+  .bp-rating svg{width:11px;height:11px;fill:var(--mocha-deep);}
+  .bp-dates{display:grid;grid-template-columns:1fr 1fr;border:2px solid var(--pink-deep);border-radius:14px;overflow:hidden;margin-bottom:10px;}
+  .bp-dates div{padding:11px 14px;border-right:2px solid var(--pink-deep);}
+  .bp-dates div:last-child{border-right:none;}
+  .bp-dates label{display:block;font-size:10px;font-weight:800;letter-spacing:0.04em;color:var(--mocha);margin-bottom:2px;text-transform:uppercase;}
+  .bp-dates .val{font-size:13.5px;font-weight:700;}
+  .bp-guests{border:2px solid var(--pink-deep);border-radius:14px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;cursor:pointer;}
+  .bp-guests label{display:block;font-size:10px;font-weight:800;letter-spacing:0.04em;color:var(--mocha);margin-bottom:2px;text-transform:uppercase;}
+  .bp-reserve{width:100%;padding:14px;border-radius:16px;background:var(--mocha-deep);color:var(--cream);font-family:var(--display);font-size:16px;font-weight:800;margin-bottom:12px;transition:background .2s var(--ease), transform .15s var(--bounce);}
+  .bp-reserve:hover{background:var(--mocha);}
+  .bp-reserve:active{transform:scale(0.98);}
+  .bp-note{text-align:center;font-size:12.5px;color:var(--mocha);font-weight:600;margin-bottom:20px;}
+  .bp-breakdown{display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:600;}
+  .bp-row{display:flex;justify-content:space-between;color:var(--mocha);}
+  .bp-row.total{color:var(--mocha-deep);font-weight:800;border-top:2px solid var(--pink-soft);padding-top:12px;margin-top:2px;font-size:15px;}
+  @media (max-width:980px){.booking-panel{position:static;}}
+
+  .spark{position:absolute;pointer-events:none;width:6px;height:6px;border-radius:50%;background:var(--peach);opacity:0;}
+  .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--mocha-deep);color:var(--cream);padding:12px 22px;border-radius:24px;font-family:var(--display);font-weight:700;font-size:14.5px;opacity:0;transition:opacity .3s var(--ease), transform .3s var(--bounce);z-index:95;pointer-events:none;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .lightbox{position:fixed;inset:0;background:rgba(90,59,46,0.97);z-index:100;display:none;flex-direction:column;}
+  .lightbox.open{display:flex;}
+  .lb-head{display:flex;justify-content:space-between;align-items:center;padding:22px 30px;color:var(--cream);}
+  .lb-close{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--cream);}
+  .lb-close:hover{background:rgba(255,255,255,0.1);}
+  .lb-count{font-size:14px;color:rgba(252,243,232,0.7);font-weight:700;}
+  .lb-main{flex:1;display:flex;align-items:center;justify-content:center;position:relative;padding:0 70px;overflow:hidden;}
+  .lb-main img{max-height:76vh;max-width:100%;object-fit:contain;border-radius:12px;cursor:zoom-in;transition:transform .3s var(--ease);}
+  .lb-main img.zoomed{transform:scale(1.6);cursor:zoom-out;}
+  .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.1);color:var(--cream);display:flex;align-items:center;justify-content:center;}
+  .lb-nav:hover{background:rgba(255,255,255,0.2);}
+  .lb-nav.left{left:16px;} .lb-nav.right{right:16px;}
+  .lb-strip{display:flex;gap:8px;padding:18px 30px;overflow-x:auto;}
+  .lb-strip img{width:76px;height:56px;object-fit:cover;border-radius:8px;opacity:0.5;cursor:pointer;transition:opacity .2s var(--ease);}
+  .lb-strip img.active{opacity:1;outline:2px solid var(--cream);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav-row">
+    <a class="logo" href="#">Almanac</a>
+    <nav class="nav-pills">
+      <a href="#" class="active">Stays</a>
+      <a href="#">Experiences</a>
+      <a href="#">Destinations</a>
+      <a href="#">FAQ</a>
+    </nav>
+    <div class="nav-right">
+      <a href="almanac-login.html"><button class="btn-order" style="background:transparent;color:var(--mocha-deep);">Log in</button></a>
+      <button class="btn-order">Sign up</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="title-bar">
+    <div>
+      <h1 class="p-title">Loft above the old print works</h1>
+      <div class="p-meta">
+        <span class="rating"><svg class="star" viewBox="0 0 24 24"><path d="M12 2l2.9 6.6L21 9.3l-5 4.6 1.3 6.8L12 17.3 6.7 20.7 8 13.9 3 9.3l6.1-.7z"/></svg> 4.93</span>
+        <span class="dot"></span>
+        <a href="#reviews" style="text-decoration:underline;">212 reviews</a>
+        <span class="dot"></span>
+        <span>Porto, Portugal</span>
+      </div>
+    </div>
+    <div class="title-actions">
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12v8a1 1 0 001 1h4v-6h6v6h4a1 1 0 001-1v-8"/><path d="M2 10l10-8 10 8"/></svg>
+        Share
+      </button>
+      <button class="icon-btn" id="saveBtn" style="position:relative;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7.5-4.6-10-9.1C.5 8.2 2.3 4.8 5.6 4.1c2-.4 4 .5 6.4 3 2.4-2.5 4.4-3.4 6.4-3 3.3.7 5.1 4.1 3.6 7.8-2.5 4.5-10 9.1-10 9.1z"/></svg>
+        Save
+      </button>
+    </div>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <span class="gallery-sticker">good light</span>
+    <a class="g-main" data-i="0"><img src="https://picsum.photos/id/1048/1000/900" alt="Living area of the loft with exposed brick and large windows"></a>
+    <a data-i="1"><img src="https://picsum.photos/id/1050/700/560" alt="Bedroom with linen bedding and morning light"></a>
+    <a data-i="2"><img src="https://picsum.photos/id/1051/700/560" alt="Kitchen with dark cabinetry and marble counter"></a>
+    <a data-i="3"><img src="https://picsum.photos/id/1074/700/560" alt="Rooftop terrace overlooking the rooftops of Porto"></a>
+    <a data-i="4"><img src="https://picsum.photos/id/1039/700/560" alt="Bathroom with tile flooring and brass fixtures"></a>
+    <button class="show-all-btn" id="showAllBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Show all photos
+    </button>
+  </div>
+
+  <div class="detail-layout">
+    <div class="detail-main">
+
+      <section class="block">
+        <p class="quick-facts">
+          <span><b>Entire loft</b> hosted by Renata, who has excellent taste and better bread</span>
+          <span>4 guests · 2 bedrooms · 3 beds · 1.5 baths · zero beige surfaces</span>
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 class="block-title">The pitch</h2>
+        <div class="desc-text collapsed" id="descText">
+          <p>Once a working print house in Porto's Bonfim district, this loft keeps its original steel columns and tall factory windows while everything else has been rebuilt around quiet, considered living. The main floor opens onto a rooftop terrace with a clear view over the tiled roofs toward the river.</p>
+          <p>Mornings are best spent with coffee on the terrace; the neighbourhood wakes up slowly, and the nearest bakery opens at seven. In the evening, it's a ten-minute walk down to the Ribeira, or a shorter one to any of the small tascas along Rua do Bonfim.</p>
+          <p>The space sleeps four across two bedrooms — one with a queen bed, the other with two singles that can be joined on request. Note that the building has no elevator; the loft is on the third floor.</p>
+        </div>
+        <button class="show-more" id="showMoreBtn">Show more</button>
+      </section>
+
+      <section class="block">
+        <h2 class="block-title">What you get</h2>
+        <div class="amenity-grid">
+          <div class="amenity"><svg viewBox="0 0 24 24"><path d="M5 12.5a11 11 0 0114 0M8.5 16a6 6 0 017 0M12 19.5h.01"/></svg> Wi-Fi</div>
+          <div class="amenity"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/></svg> Kitchen</div>
+          <div class="amenity"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M8 20h8M12 16v4"/></svg> Dedicated workspace</div>
+          <div class="amenity"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M9 6h.01"/></svg> Washer</div>
+          <div class="amenity"><svg viewBox="0 0 24 24"><path d="M12 2v4M4.9 4.9l2.8 2.8M2 12h4M4.9 19.1l2.8-2.8M12 18v4M19.1 19.1l-2.8-2.8M22 12h-4M19.1 4.9l-2.8 2.8"/><circle cx="12" cy="12" r="3"/></svg> Heating</div>
+          <div class="amenity"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="13" rx="1"/><path d="M9 21h6M12 18v3"/></svg> TV</div>
+          <div class="amenity"><svg viewBox="0 0 24 24"><path d="M6 9V6a3 3 0 016 0v3M4 9h16v10a1 1 0 01-1 1H5a1 1 0 01-1-1z"/></svg> Air conditioning</div>
+          <div class="amenity"><svg viewBox="0 0 24 24"><path d="M3 20l4-11 4 11M15 20l4-11 4 11M3 20h20M7 12h10"/></svg> Private rooftop terrace</div>
+        </div>
+      </section>
+
+      <section class="block" id="reviews">
+        <h2 class="block-title">What people actually said</h2>
+        <div class="review-summary">
+          <div>
+            <p class="review-score">4.93</p>
+            <p class="review-score-sub">basically a perfect score, humble brag</p>
+          </div>
+          <div class="cat-bars" id="catBars"></div>
+        </div>
+        <div class="review-grid" id="reviewGrid"></div>
+        <button class="show-all-reviews">Show all 212 reviews</button>
+      </section>
+
+      <section class="block">
+        <h2 class="block-title">Where you'll actually be</h2>
+        <div class="loc-map">
+          <svg viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice">
+            <rect width="800" height="300" fill="#F5C6D6"/>
+            <path d="M0,60 C120,40 180,140 100,180 C50,205 80,260 180,270 L0,300 Z" fill="#F9DCE6"/>
+            <path d="M800,20 C680,40 660,120 740,160 C790,185 800,220 800,220 Z" fill="#F9DCE6"/>
+            <g stroke="#EDA9C4" stroke-width="2">
+              <line x1="0" y1="75" x2="800" y2="75"/><line x1="0" y1="150" x2="800" y2="150"/><line x1="0" y1="225" x2="800" y2="225"/>
+              <line x1="200" y1="0" x2="200" y2="300"/><line x1="400" y1="0" x2="400" y2="300"/><line x1="600" y1="0" x2="600" y2="300"/>
+            </g>
+          </svg>
+          <div class="loc-pin">Bonfim, Porto</div>
+        </div>
+        <div class="nearby-list">
+          <div class="nearby-item"><span>Cantina 32</span><span class="nearby-cat">Restaurant · 4 min walk</span></div>
+          <div class="nearby-item"><span>Livraria Lello</span><span class="nearby-cat">Attraction · 12 min walk</span></div>
+          <div class="nearby-item"><span>São Bento Station</span><span class="nearby-cat">Transportation · 8 min walk</span></div>
+        </div>
+      </section>
+
+      <section class="block" style="border-bottom:none;">
+        <h2 class="block-title">The fine print (kept mercifully short)</h2>
+        <div id="policies">
+          <div class="policy-item open">
+            <button class="policy-head">
+              Cancellation policy
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="policy-body">
+              <p>Free cancellation until 48 hours before check-in. After that, the first night is non-refundable.</p>
+            </div>
+          </div>
+          <div class="policy-item">
+            <button class="policy-head">
+              House rules
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="policy-body">
+              <ul>
+                <li>Check-in after 3:00 PM, checkout before 11:00 AM</li>
+                <li>No smoking, no parties or events</li>
+                <li>Quiet hours from 10:00 PM to 8:00 AM</li>
+              </ul>
+            </div>
+          </div>
+          <div class="policy-item">
+            <button class="policy-head">
+              Safety information
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="policy-body">
+              <ul>
+                <li>Smoke and carbon monoxide alarms installed</li>
+                <li>No exterior security cameras on the property</li>
+                <li>Third-floor walk-up, no elevator</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <aside>
+      <div class="booking-panel" id="bookingPanel">
+        <div class="bp-price"><span style="font-family:var(--display);">$143</span><span>/ night</span></div>
+        <div class="bp-rating"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6L21 9.3l-5 4.6 1.3 6.8L12 17.3 6.7 20.7 8 13.9 3 9.3l6.1-.7z"/></svg> 4.93 · 212 reviews</div>
+        <div class="bp-dates">
+          <div><label>Check-in</label><span class="val">Sep 20</span></div>
+          <div><label>Checkout</label><span class="val">Sep 24</span></div>
+        </div>
+        <div class="bp-guests" id="guestsToggle">
+          <div><label>Guests</label><span class="val" id="guestVal">2 guests</span></div>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <button class="bp-reserve" id="reserveBtn">Reserve</button>
+        <p class="bp-note">you won't be charged yet, we're not monsters</p>
+        <div class="bp-breakdown">
+          <div class="bp-row"><span>$143 x 4 nights</span><span>$572</span></div>
+          <div class="bp-row"><span>Cleaning fee</span><span>$45</span></div>
+          <div class="bp-row"><span>Service fee</span><span>$68</span></div>
+          <div class="bp-row"><span>Taxes</span><span>$37</span></div>
+          <div class="bp-row total"><span>Total</span><span>$722</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <div class="lb-head">
+    <span class="lb-count" id="lbCount">1 / 5</span>
+    <button class="lb-close" id="lbClose" aria-label="Close gallery">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="lb-main">
+    <button class="lb-nav left" id="lbPrev" aria-label="Previous photo">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <img id="lbImage" src="" alt="">
+    <button class="lb-nav right" id="lbNext" aria-label="Next photo">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+  <div class="lb-strip" id="lbStrip"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const photos = [
+  {src:'https://picsum.photos/id/1048/1400/1000', alt:'Living area with exposed brick and large windows'},
+  {src:'https://picsum.photos/id/1050/1400/1000', alt:'Bedroom with linen bedding and morning light'},
+  {src:'https://picsum.photos/id/1051/1400/1000', alt:'Kitchen with dark cabinetry and marble counter'},
+  {src:'https://picsum.photos/id/1074/1400/1000', alt:'Rooftop terrace overlooking the rooftops of Porto'},
+  {src:'https://picsum.photos/id/1039/1400/1000', alt:'Bathroom with tile flooring and brass fixtures'},
+];
+
+const lightbox = document.getElementById('lightbox');
+const lbImage = document.getElementById('lbImage');
+const lbCount = document.getElementById('lbCount');
+const lbStrip = document.getElementById('lbStrip');
+let lbIndex = 0;
+lbStrip.innerHTML = photos.map((p,i)=>`<img src="${p.src}" data-i="${i}" alt="Thumbnail ${i+1}">`).join('');
+function openLightbox(i){ lbIndex = i; updateLightbox(); lightbox.classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeLightbox(){ lightbox.classList.remove('open'); document.body.style.overflow = ''; lbImage.classList.remove('zoomed'); }
+function updateLightbox(){
+  lbImage.src = photos[lbIndex].src; lbImage.alt = photos[lbIndex].alt; lbImage.classList.remove('zoomed');
+  lbCount.textContent = `${lbIndex+1} / ${photos.length}`;
+  lbStrip.querySelectorAll('img').forEach((img,i)=>img.classList.toggle('active', i===lbIndex));
+}
+document.querySelectorAll('#gallery a').forEach(a=> a.addEventListener('click', ()=> openLightbox(Number(a.dataset.i))));
+document.getElementById('showAllBtn').addEventListener('click', ()=> openLightbox(0));
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+document.getElementById('lbPrev').addEventListener('click', ()=>{ lbIndex=(lbIndex-1+photos.length)%photos.length; updateLightbox(); });
+document.getElementById('lbNext').addEventListener('click', ()=>{ lbIndex=(lbIndex+1)%photos.length; updateLightbox(); });
+lbImage.addEventListener('click', ()=> lbImage.classList.toggle('zoomed'));
+lbStrip.addEventListener('click', (e)=>{ const img = e.target.closest('img'); if(img){ lbIndex = Number(img.dataset.i); updateLightbox(); } });
+document.addEventListener('keydown', (e)=>{
+  if(!lightbox.classList.contains('open')) return;
+  if(e.key==='Escape') closeLightbox();
+  if(e.key==='ArrowLeft') document.getElementById('lbPrev').click();
+  if(e.key==='ArrowRight') document.getElementById('lbNext').click();
+});
+
+const descText = document.getElementById('descText');
+const showMoreBtn = document.getElementById('showMoreBtn');
+showMoreBtn.addEventListener('click', ()=>{
+  const collapsed = descText.classList.toggle('collapsed');
+  showMoreBtn.textContent = collapsed ? 'Show more' : 'Show less';
+});
+
+const toast = document.getElementById('toast');
+function showToast(msg){
+  toast.textContent = msg; toast.classList.add('show');
+  clearTimeout(showToast._t); showToast._t = setTimeout(()=> toast.classList.remove('show'), 1700);
+}
+function spawnSparkles(container){
+  const palette = ['var(--peach)','var(--pink-deep)','var(--mocha)'];
+  for(let i=0;i<6;i++){
+    const s = document.createElement('span');
+    s.className = 'spark';
+    const angle = (Math.PI*2*i)/6;
+    const dist = 20 + Math.random()*10;
+    s.style.left='16px'; s.style.top='16px';
+    s.style.background = palette[i % palette.length];
+    container.appendChild(s);
+    s.animate([{transform:'translate(0,0) scale(1)', opacity:1},{transform:`translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px) scale(0)`, opacity:0}], {duration:480, easing:'cubic-bezier(.22,.61,.36,1)'});
+    setTimeout(()=> s.remove(), 500);
+  }
+}
+document.getElementById('saveBtn').addEventListener('click', function(){
+  const nowActive = this.classList.toggle('active');
+  this.querySelector('svg').setAttribute('fill', nowActive ? 'currentColor' : 'none');
+  if(nowActive){ spawnSparkles(this); showToast('saved — hoard growing 🏴'); }
+});
+document.getElementById('reserveBtn').addEventListener('click', function(){
+  showToast('almost there — just kidding, this is a demo');
+});
+
+const categories = [
+  {name:'Cleanliness', val:4.9},{name:'Accuracy', val:4.9},{name:'Check-in', val:5.0},
+  {name:'Communication', val:5.0},{name:'Location', val:4.8},{name:'Value', val:4.7},
+];
+document.getElementById('catBars').innerHTML = categories.map(c=>`
+  <div class="cat-row">
+    <span class="cat-name">${c.name}</span>
+    <div class="cat-track"><div class="cat-fill" style="width:${c.val/5*100}%"></div></div>
+    <span class="cat-val">${c.val.toFixed(1)}</span>
+  </div>
+`).join('');
+
+const reviews = [
+  {name:'Helena', initial:'H', date:'August 2026', text:'Exactly as pictured, and quieter than I expected for being so central. The terrace coffee in the morning was the highlight of the trip.'},
+  {name:'Marco', initial:'M', date:'July 2026', text:'Renata was easy to reach the whole stay and left excellent notes on where to eat nearby. The walk-up is real — worth knowing if you have heavy bags.'},
+  {name:'Priya', initial:'P', date:'June 2026', text:'Beautifully put together. The light in the main room in the late afternoon is something else. Would stay again without hesitation.'},
+  {name:'Tomás', initial:'T', date:'May 2026', text:'Great base for exploring Porto on foot. Beds were comfortable, kitchen had everything we needed for a simple breakfast.'},
+];
+document.getElementById('reviewGrid').innerHTML = reviews.map(r=>`
+  <div class="review-card">
+    <div class="review-head">
+      <div class="review-avatar">${r.initial}</div>
+      <div><p class="review-name">${r.name}</p><p class="review-date">${r.date}</p></div>
+    </div>
+    <p class="review-text">${r.text}</p>
+  </div>
+`).join('');
+
+document.querySelectorAll('.policy-head').forEach(head=>{
+  head.addEventListener('click', ()=>{ head.parentElement.classList.toggle('open'); });
+});
+
+let guestCount = 2;
+document.getElementById('guestsToggle').addEventListener('click', function(){
+  guestCount = guestCount >= 4 ? 1 : guestCount + 1;
+  document.getElementById('guestVal').textContent = guestCount === 1 ? '1 guest' : `${guestCount} guests`;
+});
+</script>
+</body>
+</html>

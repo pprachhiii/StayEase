@@ -27,7 +27,7 @@ module.exports.registerUser = async (req, res, next) => {
         return next(err);
       }
       req.flash("success", "Registration successful! Welcome to StayEase!");
-      res.redirect("/listings");
+      res.redirect("/home");
     });
   } catch (err) {
     console.error(err);
@@ -41,7 +41,7 @@ module.exports.showLoginForm = async (req, res) => {
 };
 
 module.exports.loginUser = async (req, res) => {
-  let redirectUrl = res.locals.redirectUrl || "/listings"; // Use the redirectUrl from saveRedirectUrl middleware
+  let redirectUrl = res.locals.redirectUrl || "/home"; // Use the redirectUrl from saveRedirectUrl middleware
   res.redirect(redirectUrl);
 };
 
@@ -51,6 +51,6 @@ module.exports.logoutUser = async (req, res) => {
       return next(err);
     }
     req.flash("success", "Logout successful!");
-    res.redirect("/listings");
+    res.redirect("/home");
   });
 };

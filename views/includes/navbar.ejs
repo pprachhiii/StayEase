@@ -1,38 +1,296 @@
-<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold" href="/listings">
-        StayEasy
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-  
-      <div class="collapse navbar-collapse" id="navbarContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="/listings">Explore</a>
-          </li>
-        </ul>
-  
-        <form class="d-flex mx-auto" action="/listings" method="GET">
-          <input class="form-control me-2" type="search" name="search" placeholder="Search listings..." />
-          <button class="btn btn-outline-primary" type="submit">Search</button>
-        </form>        
-      
-        <a href="/listings/new" class="btn create-btn me-3">Become a host</a>
+<style>
+  :root {
+    --header-h: 78px;
+  }
 
-        <div class="d-flex align-items-center gap-2">
-          <% if (!currUser) { %>
-            <a href="/login" class="btn btn-primary rounded-pill me-2">Login</a>
-            <a href="/register" class="btn btn-primary rounded-pill">Sign Up</a>  
-          <% } %>
-          <% if (currUser) { %>
-            <a href="/logout" class="btn btn-outline-primary rounded-pill">Logout <i class="fa-solid fa-right-from-bracket"></i></a>
-          <% } %>
+  header { 
+    position: sticky; 
+    top: 0; 
+    z-index: 100; 
+    background: var(--pink); 
+    border-bottom: 2px solid var(--pink-deep); 
+  }
+
+  /* Navigation Layout */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-h);
+    gap: 20px;
+  }
+
+  .logo {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--mocha-deep);
+    flex-shrink: 0;
+  }
+
+  /* Center Container & Sliding Search */
+  .nav-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: 30px;
+    padding: 5px 8px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s var(--ease);
+    height: 50px;
+  }
+
+  .nav-link {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--mocha-deep);
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .nav-link:hover { background: var(--white); }
+
+  /* Sliding Door Search Control */
+  .search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .search-input-wrap {
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-width 0.45s var(--ease), opacity 0.3s var(--ease), padding 0.3s var(--ease);
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center.search-active .search-input-wrap {
+    max-width: 280px;
+    opacity: 1;
+    padding: 0 8px;
+  }
+
+  .search-input-wrap input {
+    border: none;
+    outline: none;
+    background: var(--white);
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--mocha-deep);
+    width: 100%;
+    border: 1.5px solid var(--pink-deep);
+  }
+
+  .btn-search-toggle {
+    background: var(--mocha-deep);
+    color: var(--cream);
+    font-size: 12.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 8px 18px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s var(--ease), transform 0.18s var(--bounce);
+  }
+  .btn-search-toggle:hover {
+    background: var(--mocha);
+    transform: scale(1.03);
+  }
+
+  /* Right Section Controls */
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .btn-order {
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border-radius: 24px;
+    transition: background 0.2s var(--ease), transform 0.18s var(--bounce);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-order:hover { transform: translateY(-2px); }
+
+  .btn-auth {
+    color: var(--mocha-deep);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .btn-auth:hover { background: rgba(255, 255, 255, 0.5); }
+
+  .btn-demo {
+    background: var(--mocha-deep);
+    color: var(--cream);
+  }
+  .btn-demo:hover { background: var(--mocha); }
+
+  .btn-logout {
+    background: #D9694F;
+    color: var(--white);
+  }
+  .btn-logout:hover { background: #B4523B; }
+
+  /* User Icon Profile Trigger & Popover */
+  .user-profile-wrap { position: relative; }
+
+  .icon-btn-user {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.65);
+    border: 2px solid var(--pink-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mocha-deep);
+    transition: transform 0.2s var(--bounce), background 0.2s var(--ease);
+  }
+  .icon-btn-user:hover { background: var(--white); transform: scale(1.05); }
+
+  .user-popover {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 220px;
+    background: var(--white);
+    border: 2px solid var(--pink-deep);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 10px 25px rgba(90, 59, 46, 0.12);
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 101;
+  }
+  .user-popover.active { display: flex; }
+  .user-popover .user-name { font-family: var(--display); font-size: 16px; font-weight: 800; color: var(--mocha-deep); margin: 0; }
+  .user-popover .user-email { font-size: 12px; color: var(--mocha); word-break: break-all; margin: 0; }
+
+  @media (max-width: 850px) {
+    .nav-link { display: none; }
+  }
+</style>
+
+<header>
+  <div class="wrap nav-row">
+    <!-- Left Logo -->
+    <a class="logo" href="/">StayEasy</a>
+
+    <!-- Center Navigation and Search -->
+    <div class="nav-center" id="navCenter">
+      <a href="/listings" class="nav-link">Explore</a>
+
+      <form class="search-container" action="/listings" method="GET" id="searchForm">
+        <div class="search-input-wrap">
+          <input type="search" name="search" id="searchInput" placeholder="Search destinations..." />
         </div>
-      </div>
+        <button class="btn-search-toggle" type="button" id="searchToggleBtn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span>Search</span>
+        </button>
+      </form>
+
+      <a href="/listings/new" class="nav-link">Become a Host</a>
     </div>
-  </nav>
-  
+
+    <!-- Right Actions -->
+    <div class="nav-right">
+      <% if (!currUser) { %>
+        <a class="btn-auth" href="/login">Login</a>
+        <a class="btn-auth" href="/register">Sign Up</a>
+      <% } %>
+
+      <% if (currUser) { %>
+        <div class="user-profile-wrap">
+          <button class="icon-btn-user" id="userBtn" aria-label="User profile">
+            <i class="fa-solid fa-user"></i>
+          </button>
+          
+          <div class="user-popover" id="userPopover">
+            <p class="user-name"><%= currUser.username %></p>
+            <p class="user-email"><%= currUser.email %></p>
+          </div>
+        </div>
+
+        <button class="btn-order btn-demo">Book Demo</button>
+        <a href="/logout" class="btn-order btn-logout">
+          Logout <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+      <% } %>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Search toggle behavior
+  const navCenter = document.getElementById('navCenter');
+  const searchToggleBtn = document.getElementById('searchToggleBtn');
+  const searchInput = document.getElementById('searchInput');
+  const searchForm = document.getElementById('searchForm');
+
+  if (searchToggleBtn) {
+    searchToggleBtn.addEventListener('click', (e) => {
+      if (!navCenter.classList.contains('search-active')) {
+        e.preventDefault();
+        navCenter.classList.add('search-active');
+        searchInput.focus();
+      } else {
+        if (searchInput.value.trim() !== '') {
+          searchForm.submit();
+        } else {
+          navCenter.classList.remove('search-active');
+        }
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!navCenter.contains(e.target)) {
+        navCenter.classList.remove('search-active');
+      }
+    });
+  }
+
+  // User popover behavior
+  const userBtn = document.getElementById('userBtn');
+  const userPopover = document.getElementById('userPopover');
+
+  if (userBtn && userPopover) {
+    userBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userPopover.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!userPopover.contains(e.target)) {
+        userPopover.classList.remove('active');
+      }
+    });
+  }
+</script>

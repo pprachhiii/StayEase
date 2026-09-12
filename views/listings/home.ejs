@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StayEase — Pack your bags already</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FCF3E8;
+    --pink:#F5C6D6;
+    --pink-soft:#F9DCE6;
+    --pink-deep:#EDA9C4;
+    --mocha:#7B5240;
+    --mocha-deep:#5A3B2E;
+    --peach:#EFAF8B;
+    --white:#FFFFFF;
+    --display:"Baloo 2", "Quicksand", sans-serif;
+    --sans:"Quicksand", -apple-system, sans-serif;
+    --ease: cubic-bezier(.22,.61,.36,1);
+    --bounce: cubic-bezier(.34,1.56,.64,1);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--mocha-deep);color:var(--cream);font-family:var(--sans);font-weight:600;line-height:1.5;overflow-x:hidden;}
+  img{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--cream);outline-offset:3px;border-radius:4px;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important;transition-duration:.001ms !important;} }
+  .wrap{max-width:1240px;margin:0 auto;padding:0 44px;}
+
+  /* ================= HERO / HEADER (MOCHA BACKGROUND) ================= */
+  .hero-section{background:var(--mocha-deep);color:var(--cream);position:relative;padding-bottom:70px;}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:30px 0 10px;}
+  .logo{font-family:var(--display);font-size:30px;font-weight:800;color:var(--cream);letter-spacing:-0.01em;}
+  .nav-pills{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border-radius:30px;padding:6px;}
+  .nav-pills a{font-size:13.5px;font-weight:700;color:var(--cream);padding:9px 18px;border-radius:24px;transition:background .2s var(--ease);text-transform:uppercase;letter-spacing:0.03em;}
+  .nav-pills a:hover, .nav-pills a.active{background:var(--peach);color:var(--mocha-deep);}
+  .nav-right{display:flex;align-items:center;gap:16px;}
+  .icon-btn-round{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;transition:transform .2s var(--bounce), background .2s var(--ease);}
+  .icon-btn-round:hover{background:var(--cream);color:var(--mocha-deep);transform:rotate(-8deg);}
+  .btn-order{background:var(--peach);color:var(--mocha-deep);font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;padding:13px 24px;border-radius:26px;transition:background .2s var(--ease), transform .18s var(--bounce);}
+  .btn-order:hover{background:var(--cream);transform:translateY(-2px);}
+  @media (max-width:880px){.nav-pills{display:none;}}
+
+  .hero-body{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;padding-top:34px;}
+  .hero-copy{padding-right:10px;}
+  .hero-eyebrow{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--peach);margin:0 0 10px;}
+  h1.hero-headline{font-family:var(--display);font-size:clamp(30px,3.4vw,42px);font-weight:800;color:var(--cream);line-height:1.18;margin-bottom: 20px;}
+  .globe-hint{font-family:var(--display);font-size:16px;font-weight:700;color:var(--peach);display:flex;align-items:center;gap:8px;margin-top:20px;}
+  .globe-hint svg{animation:wiggle 1.6s ease-in-out infinite;}
+  @keyframes wiggle{0%,100%{transform:rotate(0deg);}25%{transform:rotate(-12deg);}75%{transform:rotate(12deg);}}
+  
+  /* Globe Canvas & Tooltip */
+  #globeCanvas{width:100%;height:auto;cursor:grab;touch-action:none;}
+  #globeCanvas:active{cursor:grabbing;}
+  .globe-canvas-wrap{position:relative;}
+  .globe-tooltip{
+    position:absolute;pointer-events:none;background:var(--peach);color:var(--mocha-deep);
+    font-family:var(--display);font-size:13px;font-weight:700;padding:6px 14px;border-radius:20px;
+    transform:translate(-50%,-140%);opacity:0;transition:opacity .15s var(--ease);white-space:nowrap;
+  }
+  .globe-tooltip.show{opacity:1;}
+  @media (max-width:880px){.hero-body{grid-template-columns:1fr;}.hero-copy{padding-right:0;}}
+
+  /* wave from hero into marquee */
+  .wave-top{display:block;width:100%;height:64px;position:absolute;left:0;bottom:0;}
+
+  /* ================= MARQUEE ================= */
+  .marquee-band{background:var(--mocha-deep);overflow:hidden;position:relative;padding:18px 0;}
+  .marquee-track{display:flex;white-space:nowrap;animation:scrollLeft 26s linear infinite;width:max-content;}
+  .marquee-track span{font-family:var(--display);color:var(--cream);font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;padding:0 22px;display:flex;align-items:center;gap:22px;}
+  .marquee-track span::after{content:"•";color:var(--peach);}
+  @keyframes scrollLeft{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* ================= SECOND SECTION (CREAM BACKGROUND) ================= */
+  .photo-feature-section{background:var(--cream);color:var(--mocha-deep);position:relative;overflow:hidden;padding:0;}
+  .section-wave-top, .section-wave-bottom{display:block;width:100%;height:60px;}
+  .section-wave-top{margin-bottom:-1px;}
+  .section-wave-bottom{margin-top:-1px;}
+  .feature-inner{padding:20px 0 60px;}
+  .feature-layout{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;}
+  
+  .hero-photo-wrap{position:relative;}
+  .hero-blob{
+    aspect-ratio:5/4;overflow:hidden;
+    border-radius:63% 37% 54% 46% / 43% 37% 63% 57%;
+    border:5px solid var(--pink-deep);
+  }
+  .hero-blob img{width:100%;height:100%;object-fit:cover;}
+  .hero-doodle{position:absolute;top:-18px;left:6%;width:64px;height:64px;color:var(--mocha-deep);transform:rotate(-8deg);}
+
+  .feature-copy .feature-eyebrow{font-size:12.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--mocha);margin:0 0 10px;}
+  .feature-copy h2{font-family:var(--display);font-size:clamp(28px,3.4vw,40px);font-weight:800;margin:0 0 16px;color:var(--mocha-deep);}
+  .feature-copy p{color:var(--mocha-deep);font-size:15px;font-weight:600;max-width:400px;margin:0 0 28px;}
+
+  @media (max-width:860px){.feature-layout{grid-template-columns:1fr;}}
+
+  .side-social{
+    position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:40;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .side-social a{width:38px;height:38px;border-radius:50%;background:var(--pink-soft);display:flex;align-items:center;justify-content:center;color:var(--mocha-deep);transition:transform .2s var(--bounce), background .2s var(--ease);}
+  .side-social a:hover{background:var(--pink-deep);transform:scale(1.1) rotate(-6deg);}
+  @media (max-width:900px){.side-social{display:none;}}
+
+  /* ================= SERVICES / STRIPED SECTION ================= */
+  .services-section{
+    position:relative;padding:90px 0 100px;
+    background-color:var(--pink);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='20' height='40' fill='%23F9DCE6'/%3E%3C/svg%3E");
+    background-size:40px 40px;
+  }
+  .services-head{text-align:center;margin-bottom:56px;}
+  .services-eyebrow{font-size:12.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--mocha);}
+  h2.services-title{font-family:var(--display);font-size:clamp(44px,6.4vw,72px);font-weight:800;color:var(--cream);-webkit-text-stroke:2px var(--mocha-deep);margin:6px 0 0;}
+
+  .service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
+  .service-card{text-align:center;}
+  .service-photo{
+    width:150px;height:150px;border-radius:50%;overflow:hidden;margin:0 auto 22px;
+    border:5px solid var(--white);box-shadow:0 8px 20px rgba(90,59,46,0.15);
+  }
+  .service-photo img{width:100%;height:100%;object-fit:cover;}
+  .service-panel{background:var(--mocha-deep);color:var(--cream);border-radius:18px;padding:26px 22px 28px;}
+  .service-panel h3{font-family:var(--display);font-size:19px;font-weight:700;margin:0 0 12px;color:var(--pink-soft);}
+  .service-panel p{font-size:13.5px;color:rgba(252,243,232,0.85);margin:0 0 16px;line-height:1.6;}
+  .service-panel a{font-size:12.5px;font-weight:700;text-decoration:underline;color:var(--peach);}
+  @media (max-width:860px){.service-grid{grid-template-columns:1fr;max-width:320px;margin:0 auto;}}
+
+  /* ================= GALLERY STRIP ================= */
+  .gallery-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+  .gallery-strip a{aspect-ratio:1;overflow:hidden;}
+  .gallery-strip img{width:100%;height:100%;object-fit:cover;transition:transform .4s var(--ease);}
+  .gallery-strip a:hover img{transform:scale(1.08);}
+  @media (max-width:700px){.gallery-strip{grid-template-columns:repeat(3,1fr);}}
+  
+  .btn {
+    color: var(--white);
+    padding: 18px 24px;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--pink-deep);
+    display: inline-block;
+    margin-top: 10px;
+    transition: background .2s var(--ease);
+  }
+  .btn:hover { text-decoration: underline; background: var(--pink-soft); color: var(--mocha-deep); }
+
+</style>
+</head>
+<body>
+
+<%- include('../includes/navbar') %>
+
+<!-- HERO SECTION (MOCHA DEEP + GLOBE ON RIGHT) -->
+<section class="hero-section">
+  <div class="wrap">
+    <div class="hero-body">
+      <div class="hero-copy">
+        <p class="globe-hint">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+          go on, give it a spin
+        </p>
+                <h1 class="hero-headline">Your favorite place to disappear for a weekend (or several).</h1>
+        <a class="btn" href="/listings">Explore</a>
+        <a class="btn" href="#">Become a host</a>
+        
+      </div>
+
+      <div class="globe-canvas-wrap">
+        <canvas id="globeCanvas" width="600" height="600"></canvas>
+        <div class="globe-tooltip" id="globeTooltip"></div>
+      </div>
+    </div>
+  </div>
+
+  <svg class="wave-top" viewBox="0 0 1440 90" preserveAspectRatio="none">
+    <path d="M0,50 C240,10 480,90 720,55 C960,20 1200,85 1440,45 L1440,90 L0,90 Z" fill="#5A3B2E"/>
+  </svg>
+</section>
+
+<div class="marquee-band">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- FEATURE SECTION (CREAM + PHOTO & DOODLE ON LEFT) -->
+<section class="photo-feature-section">
+  <svg class="section-wave-top" viewBox="0 0 1440 60" preserveAspectRatio="none">
+    <path d="M0,0 L1440,0 L1440,20 C1080,55 720,5 360,40 C240,50 120,30 0,45 Z" fill="#5A3B2E"/>
+  </svg>
+  <div class="wrap feature-inner">
+    <div class="feature-layout">
+      
+      <div class="hero-photo-wrap">
+        <svg class="hero-doodle" viewBox="0 0 64 64" fill="currentColor"><ellipse cx="24" cy="30" rx="12" ry="16" transform="rotate(-20 24 30)"/><ellipse cx="42" cy="20" rx="8" ry="11" transform="rotate(15 42 20)"/></svg>
+        <div class="hero-blob">
+          <img src="https://picsum.photos/id/1015/900/720" alt="Wooden houses along a river in Kyoto at golden hour">
+        </div>
+      </div>
+
+      <div class="feature-copy">
+        <p class="feature-eyebrow">Endless Destinations</p>
+        <h2>Somewhere is always in season.</h2>
+        <p>Spin it. Squint at it. Pretend you're planning something ambitious. Whenever the season points you somewhere, there's a stay waiting on the other side.</p>
+<p class="hero-eyebrow">A world of places</p>
+      </div>
+
+    </div>
+  </div>
+  <svg class="section-wave-bottom" viewBox="0 0 1440 60" preserveAspectRatio="none">
+    <path d="M0,60 L1440,60 L1440,40 C1080,5 720,55 360,20 C240,10 120,30 0,15 Z" fill="#F5C6D6"/>
+  </svg>
+</section>
+
+<section class="services-section">
+  <div class="wrap">
+    <div class="services-head">
+      <p class="services-eyebrow">What we're about</p>
+      <h2 class="services-title">Services</h2>
+    </div>
+    <div class="service-grid">
+      <div class="service-card">
+        <div class="service-photo"><img src="https://picsum.photos/id/1048/300/300" alt="Loft interior with exposed brick"></div>
+        <div class="service-panel">
+          <h3>Curated Stays</h3>
+          <p>Tailored to any trip, from a spontaneous weekend to your one big yearly getaway. Booking is quick and painless, we promise.</p>
+          <a href="#">Browse stays →</a>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-photo"><img src="https://picsum.photos/id/1024/300/300" alt="Desert landscape at golden hour"></div>
+        <div class="service-panel">
+          <h3>Local Experiences</h3>
+          <p>Small-group food tours, sunrise hikes, and workshops run by people who actually live there. New ones added monthly.</p>
+          <a href="#">See experiences →</a>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-photo"><img src="https://picsum.photos/id/1059/300/300" alt="Minimalist mountain cabin interior"></div>
+        <div class="service-panel">
+          <h3>Destination Guides</h3>
+          <p>Honest, opinionated write-ups on where to go and when. We tell you which months to skip, not just the pretty ones.</p>
+          <a href="#">Read the guides →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gallery-strip">
+  <a href="#"><img src="https://picsum.photos/id/1041/300/300" alt="Timber cabin exterior"></a>
+  <a href="#"><img src="https://picsum.photos/id/1080/300/300" alt="Lavender fields in Provence"></a>
+  <a href="#"><img src="https://picsum.photos/id/1060/300/300" alt="Cliffside casita in Mexico"></a>
+  <a href="#"><img src="https://picsum.photos/id/1074/300/300" alt="Forest cabin surrounded by pines"></a>
+  <a href="#"><img src="https://picsum.photos/id/1039/300/300" alt="Hillside coastal town"></a>
+</div>
+
+<%- include('../includes/footer') %>
+
+<script>
+const words = ['Stays','Experiences','Destinations','Quiet Escapes','Design-led Stays','Weekend Hideaways','Coastal Stays','Mountain Retreats','City Residences','Long Stays'];
+const track = document.getElementById('marqueeTrack');
+const loopContent = words.map(w=>`<span>${w}</span>`).join('') ;
+track.innerHTML = loopContent + loopContent;
+
+/* ---------- GLOBE ---------- */
+(function(){
+  const canvas = document.getElementById('globeCanvas');
+  const ctx = canvas.getContext('2d');
+  const tooltip = document.getElementById('globeTooltip');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  const SIZE = 600;
+  canvas.width = SIZE * DPR; canvas.height = SIZE * DPR;
+  ctx.scale(DPR, DPR);
+  const R = SIZE/2 - 20;
+  const CX = SIZE/2, CY = SIZE/2;
+
+  const landBoxes = [
+    {latMin:15, latMax:72, lonMin:-168, lonMax:-52},
+    {latMin:-56, latMax:13, lonMin:-82, lonMax:-34},
+    {latMin:36, latMax:71, lonMin:-10, lonMax:40},
+    {latMin:-35, latMax:37, lonMin:-18, lonMax:52},
+    {latMin:5, latMax:77, lonMin:40, lonMax:180},
+    {latMin:-44, latMax:-10, lonMin:112, lonMax:154},
+  ];
+  function isLand(lat, lon){ return landBoxes.some(b => lat>=b.latMin && lat<=b.latMax && lon>=b.lonMin && lon<=b.lonMax); }
+
+  const points = [];
+  const N = 1400;
+  for(let i=0;i<N;i++){
+    const y = 1 - (i/(N-1))*2;
+    const radiusAtY = Math.sqrt(1 - y*y);
+    const theta = Math.PI*(1+Math.sqrt(5))*i;
+    const x = Math.cos(theta)*radiusAtY;
+    const z = Math.sin(theta)*radiusAtY;
+    const lat = Math.asin(y)*180/Math.PI;
+    const lon = Math.atan2(z, x)*180/Math.PI;
+    if(isLand(lat, lon)) points.push({lat, lon});
+  }
+
+  const markers = [
+    {name:'Kyoto, Japan', lat:35.0, lon:135.8},
+    {name:'Lisbon, Portugal', lat:38.7, lon:-9.1},
+    {name:'Oaxaca, Mexico', lat:17.1, lon:-96.7},
+    {name:'Cape Town, South Africa', lat:-33.9, lon:18.4},
+    {name:'Queenstown, New Zealand', lat:-45.0, lon:168.7},
+  ];
+
+  let rotY = 0.4, rotX = -0.25, autoRotate = true, dragging = false, lastX = 0, lastY = 0;
+
+  function project(lat, lon){
+    const phi = lat*Math.PI/180;
+    const theta = lon*Math.PI/180 + rotY;
+    let x = Math.cos(phi)*Math.cos(theta);
+    let y = Math.sin(phi);
+    let z = Math.cos(phi)*Math.sin(theta);
+    const cosT = Math.cos(rotX), sinT = Math.sin(rotX);
+    const y2 = y*cosT - z*sinT;
+    const z2 = y*sinT + z*cosT;
+    return {x: x*R + CX, y: y2*R + CY, z: z2, visible: z2 > -R*0.02};
+  }
+
+  let hovered = null;
+  const pulseStart = performance.now();
+
+  function draw(){
+    ctx.clearRect(0,0,SIZE,SIZE);
+    ctx.beginPath();
+    ctx.arc(CX, CY, R, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(252,243,232,0.16)';
+    ctx.lineWidth = 1.5; ctx.stroke();
+
+    points.forEach(p => {
+      const proj = project(p.lat, p.lon);
+      if(!proj.visible) return;
+      const depth = (proj.z + R) / (2*R);
+      const alpha = 0.2 + depth*0.55;
+      const size = 1.2 + depth*1.2;
+      ctx.beginPath();
+      ctx.arc(proj.x, proj.y, size, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(252,243,232,${alpha})`;
+      ctx.fill();
+    });
+
+    const pulse = 0.5 + 0.5*Math.sin((performance.now()-pulseStart)/450);
+    markers.forEach(m => {
+      const proj = project(m.lat, m.lon);
+      if(!proj.visible) return;
+      const isHover = hovered === m;
+      const r = isHover ? 7 : 4.5 + pulse*1.3;
+      ctx.beginPath();
+      ctx.arc(proj.x, proj.y, r, 0, Math.PI*2);
+      ctx.fillStyle = isHover ? '#FCF3E8' : '#EFAF8B';
+      ctx.fill();
+      if(isHover){
+        ctx.beginPath();
+        ctx.arc(proj.x, proj.y, 12, 0, Math.PI*2);
+        ctx.strokeStyle = 'rgba(252,243,232,0.5)';
+        ctx.lineWidth = 1.5; ctx.stroke();
+      }
+      m._proj = proj;
+    });
+    requestAnimationFrame(step);
+  }
+
+  let lastTime = performance.now();
+  function step(now){
+    const dt = Math.min(now - lastTime, 48);
+    lastTime = now;
+    if(autoRotate && !dragging) rotY += 0.00016 * dt;
+    draw();
+  }
+  requestAnimationFrame(step);
+
+  function getPos(e){
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = SIZE/rect.width, scaleY = SIZE/rect.height;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {x:(clientX-rect.left)*scaleX, y:(clientY-rect.top)*scaleY, clientX, clientY, rect};
+  }
+  function onDown(e){ dragging = true; autoRotate = false; const p = getPos(e); lastX = p.x; lastY = p.y; }
+  function onMove(e){
+    const p = getPos(e);
+    if(dragging){
+      const dx = p.x - lastX, dy = p.y - lastY;
+      rotY += dx * 0.006;
+      rotX = Math.max(-1.1, Math.min(1.1, rotX + dy * 0.006));
+      lastX = p.x; lastY = p.y;
+      e.preventDefault();
+    }
+    let found = null;
+    for(const m of markers){
+      if(!m._proj || !m._proj.visible) continue;
+      const dx = p.x - m._proj.x, dy = p.y - m._proj.y;
+      if(dx*dx+dy*dy < 15*15){ found = m; break; }
+    }
+    hovered = found;
+    if(found){
+      tooltip.textContent = found.name;
+      tooltip.classList.add('show');
+      const wrapRect = canvas.parentElement.getBoundingClientRect();
+      tooltip.style.left = (p.clientX - wrapRect.left) + 'px';
+      tooltip.style.top = (p.clientY - wrapRect.top) + 'px';
+      canvas.style.cursor = 'pointer';
+    } else {
+      tooltip.classList.remove('show');
+      canvas.style.cursor = dragging ? 'grabbing' : 'grab';
+    }
+  }
+  function onUp(){ dragging = false; }
+  canvas.addEventListener('mousedown', onDown);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+  canvas.addEventListener('touchstart', onDown, {passive:true});
+  canvas.addEventListener('touchmove', onMove, {passive:false});
+  canvas.addEventListener('touchend', onUp);
+})();
+</script>
+</body>
+</html>

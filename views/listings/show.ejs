@@ -4,9 +4,11 @@
   rel="stylesheet"
   href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
+
 <script>
-  const coordinates = <%- JSON.stringify(listing.geometry?.coordinates || [77.2090, 28.6139]) %>;
+  const coordinates = JSON.parse('<%- JSON.stringify(listing.geometry?.coordinates || [77.2090, 28.6139]) %>');
 </script>
+
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
 ></script>

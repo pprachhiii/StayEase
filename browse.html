@@ -55,8 +55,8 @@
   .chip svg{width:13px;height:13px;}
 
   .toolbar-right{display:flex;align-items:center;gap:14px;flex-shrink:0;}
-  .sort-wrap{position:relative;width:120px;}
-  .sort-btn{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;padding:8px 4px;}
+  .sort-wrap{position:relative;}
+  .sort-btn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:8px 4px;}
   .sort-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--white);border:2px solid var(--pink-deep);border-radius:14px;box-shadow:0 8px 24px rgba(90,59,46,0.12);min-width:190px;padding:6px;opacity:0;visibility:hidden;transform:translateY(-6px) scale(0.98);transition:opacity .18s var(--bounce), transform .18s var(--bounce), visibility .18s;z-index:70;}
   .sort-menu.open{opacity:1;visibility:visible;transform:translateY(0) scale(1);}
   .sort-option{display:flex;justify-content:space-between;padding:9px 12px;border-radius:10px;font-size:13.5px;font-weight:700;width:100%;text-align:left;}
@@ -173,30 +173,20 @@
 </style>
 </head>
 <body>
-    <%- include('../includes/navbar') %>
 
 
-    
 <div class="toolbar">
   <div class="wrap toolbar-inner">
     <div class="search-summary">
-      <button class="seg"><span class="l1"><%= search?.location || '' %></span>
-<span class="l2">Where</span></button>
+      <button class="seg"><span class="l1">Portugal</span><span class="l2">Where</span></button>
       <div class="divider"></div>
-      <button class="seg"><span class="l1"><%= search?.dates || '' %></span>
-When</span></button>
+      <button class="seg"><span class="l1">Sep 20 – 24</span><span class="l2">When</span></button>
       <div class="divider"></div>
-      <button class="seg"><span class="l1"><%= search?.guests || '' %></span>
-<span class="l2">Who</span></button>
+      <button class="seg"><span class="l1">2 guests</span><span class="l2">Who</span></button>
       <button class="edit-btn" aria-label="Search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
     </div>
-
-
-
-    
-
 
     <div class="filter-row" id="filterRow">
       <div style="position:relative;">
@@ -278,9 +268,7 @@ When</span></button>
 
 <div class="browse-layout">
   <div class="results-col">
-<h1 class="results-heading">
-  Stays in <%= search?.location || '' %>
-</h1>
+    <h1 class="results-heading">Stays in Portugal</h1>
     <p class="results-count" id="resultsCount"></p>
     <p class="results-quip">good taste, several options</p>
     <div class="result-grid" id="resultGrid"></div>
@@ -388,12 +376,17 @@ When</span></button>
 
 <div class="toast" id="toast"></div>
 
-
-
-<%- include('../includes/footer') %>
-
 <script>
-const properties = "<%- JSON.stringify(properties) %>";
+const properties = [
+  {id:1, images:['https://picsum.photos/id/1048/700/560','https://picsum.photos/id/1050/700/560','https://picsum.photos/id/1051/700/560'], title:'Loft above the old print works', loc:'Porto, Portugal', dates:'Sep 20–24', rating:4.93, reviews:212, price:143, type:'Unique stay', top:'20%', left:'40%', added:5, vibe:'host makes bread'},
+  {id:2, images:['https://picsum.photos/id/1029/700/560','https://picsum.photos/id/1022/700/560'], title:'A stone farmhouse above the valley', loc:'Sintra, Portugal', dates:'Sep 20–24', rating:4.97, reviews:88, price:284, type:'Entire home', top:'32%', left:'58%', added:2, vibe:'good light'},
+  {id:3, images:['https://picsum.photos/id/1044/700/560'], title:'The glasshouse at Boa Vista', loc:'Cascais, Portugal', dates:'Sep 20–24', rating:4.89, reviews:64, price:196, type:'Boutique hotel', top:'44%', left:'30%', added:9, vibe:'zero regrets'},
+  {id:4, images:['https://picsum.photos/id/1053/700/560','https://picsum.photos/id/1054/700/560'], title:'A quiet house near the harbour', loc:'Aveiro, Portugal', dates:'Sep 20–24', rating:5.0, reviews:31, price:312, type:'Entire home', top:'56%', left:'52%', added:1, vibe:'suspiciously perfect'},
+  {id:5, images:['https://picsum.photos/id/1060/700/560'], title:'Cliffside casita, Algarve coast', loc:'Lagos, Portugal', dates:'Sep 20–24', rating:4.85, reviews:143, price:229, type:'Unique stay', top:'70%', left:'44%', added:14, vibe:'sunset overachiever'},
+  {id:6, images:['https://picsum.photos/id/1041/700/560','https://picsum.photos/id/1043/700/560'], title:'Room in a restored townhouse', loc:'Braga, Portugal', dates:'Sep 20–24', rating:4.91, reviews:19, price:97, type:'Private room', top:'12%', left:'62%', added:20, vibe:'no beige here'},
+  {id:7, images:['https://picsum.photos/id/1074/700/560'], title:'Vineyard cottage in the Douro valley', loc:'Peso da Régua, Portugal', dates:'Sep 20–24', rating:4.96, reviews:57, price:178, type:'Entire home', top:'26%', left:'75%', added:7, vibe:'wine-adjacent'},
+  {id:8, images:['https://picsum.photos/id/1059/700/560','https://picsum.photos/id/1024/700/560'], title:'Minimalist studio, Alfama hill', loc:'Lisbon, Portugal', dates:'Sep 20–24', rating:4.8, reviews:301, price:121, type:'Boutique hotel', top:'62%', left:'25%', added:30, vibe:'main character energy'},
+];
 
 let state = { price: 400, types: new Set(), rating: 0 };
 let hoveredId = null;
@@ -407,36 +400,14 @@ const noResults = document.getElementById('noResults');
 const mapWrap = document.getElementById('mapWrap');
 const quips = ['good taste, several options', 'these all made the cut', 'curated, not just filtered', 'worth the scroll'];
 
-async function loadProperties() {
-
-  const params = new URLSearchParams();
-
-  params.set("price", state.price);
-
-  if (state.rating) {
-    params.set("rating", state.rating);
-  }
-
-  if (state.types.size) {
-    params.set(
-      "type",
-      [...state.types].join(",")
-    );
-  }
-
-  if (sortKey) {
-    params.set("sort", sortKey);
-  }
-
-  const response = await fetch(
-    `/properties?${params.toString()}`
-  );
-
-  const data = await response.json();
-
-  console.log(data);
+function filtered(){
+  return properties.filter(p => {
+    if(p.price > state.price) return false;
+    if(state.types.size && !state.types.has(p.type)) return false;
+    if(state.rating && p.rating < state.rating) return false;
+    return true;
+  });
 }
-
 function sorted(list){
   const l = [...list];
   if(sortKey==='price-asc') l.sort((a,b)=>a.price-b.price);
@@ -672,19 +643,6 @@ mapToggleBtn.addEventListener('click', ()=>{ mapCol.classList.add('show'); mapCl
 mapClose.addEventListener('click', ()=>{ mapCol.classList.remove('show'); mapClose.classList.remove('show'); });
 
 render();
-
-
-
-    let taxSwitch = document.getElementById("switchCheckDefault");
-    taxSwitch.addEventListener("click", ()=>{
-     let taxInfo = document.getElementsByClassName("tax-info");
-     for(info of taxInfo){
-        if(info.style.display!="inline"){
-            info.style.display="inline";
-        }else{
-            info.style.display="none";
-        }
-        
-     }
-    });
 </script>
+</body>
+</html>

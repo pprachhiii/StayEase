@@ -14,10 +14,15 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 
-// Route files
+// Route files (FIXED Duplicate Declaration)
+const homeRoutes = require("./routes/home");
 const listingRoutes = require("./routes/listings");
 const reviewRoutes = require("./routes/reviews");
 const authRoutes = require("./routes/auth");
+const propertyRoutes = require("./routes/property");
+const wishlistRoutes = require("./routes/wishlist");
+
+const errorMiddleware = require("./middleware/error");
 
 // Connect to MongoDB
 async function main() {
@@ -42,7 +47,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Session configuration
 const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
-  touchAfter: 24 * 3600, // time period in seconds
+  touchAfter: 24 * 3600,
 });
 const sessionOptions = {
   store: sessionStore,
@@ -52,7 +57,7 @@ const sessionOptions = {
   cookie: {
     httpOnly: true,
     secure: process.env.USE_SECURE_COOKIE === "true",
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 };
@@ -74,13 +79,16 @@ app.use((req, res, next) => {
   next();
 });
 
-// Routes
-app.get("/", (req, res) => {
-  res.redirect("/listings");
-});
+// Routes (FIXED Mounting)
+app.use("/", homeRoutes); // Mounts home routes (e.g., handles '/' or '/home')
 app.use("/listings", listingRoutes);
 app.use("/listings/:id/reviews", reviewRoutes);
 app.use("/", authRoutes);
+app.use("/properties", propertyRoutes);
+
+app.use("/wishlist", wishlistRoutes);
+
+app.use(errorMiddleware);
 
 // Catch-all Error Handler
 app.use((err, req, res, next) => {
