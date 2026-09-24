@@ -1,100 +1,148 @@
-# StayEase - Rental Listing Platform(Airbnb Clone)
+# StayEase
 
-Live Demo: [https://item-manager-psi.vercel.app/](https://stayease-smsm.onrender.com/properties)
+> **Find a place that feels like your place.**
 
-**StayEase** is a web application that allows users to browse, create, and manage listings for accommodations such as hotels or rental properties. Users can also leave reviews, filter listings, and search by location. The platform includes user authentication and provides an intuitive, responsive interface.
+StayEase is a modern accommodation discovery and listing platform built for people who want the search to feel simple, visual, and actually enjoyable. Browse properties, filter by location or category, save the ones that match your vibe, and manage your own listings from one clean interface.
 
-## 🔑 Current Features
+[**Explore StayEase →**](https://stayease-smsm.onrender.com/properties)
 
-- **User Registration & Login**: Users can register, log in, and log out securely.
-- **User Listings**: Logged-in users can create, edit, and delete their own accommodation listings.
-- **Listing Details**: Each listing includes key details and a map with approximate location coordinates (exact location is hidden).
-- **Search by Location**: Search functionality allows users to find listings based on city or location keywords.
-- **Category Filtering**: Listings can be filtered by predefined categories (e.g., hotel, apartment, cottage).
-- **Reviews**: Users can post reviews on listings. Only the review author can delete their review.
-- **Responsive UI**: Clean, mobile-friendly design using Bootstrap and custom CSS.
+---
 
-## 🛠 Technologies Used
+## Why StayEase feels different
 
-- **Backend**:
-  - Node.js with Express.js for server-side logic and routing
-  - MongoDB for database, with Mongoose for schema modeling
-  - Handlebars (or EJS) for server-side rendering
+StayEase keeps the experience focused: strong imagery, clear property details, useful discovery tools, and a UI that does not make you fight your way to the good stuff.
 
-- **Frontend**:
-  - Bootstrap 5 for layout and responsive design
-  - Custom CSS for additional styling
-  - FontAwesome for icons
+- **Clean, responsive UI** — A polished Bootstrap-based layout with custom styling, familiar icons, and a mobile-friendly experience.
+- **Visual property discovery** — Browse accommodation listings with images, categories, locations, and essential details upfront.
+- **Search by location** — Find properties using city or location keywords.
+- **Category filters** — Narrow the feed by property type, including hotels, apartments, cottages, and more.
+- **Property pages that give context** — View detailed listing information with map support and approximate location data, while keeping the exact location private.
+- **Wishlist, but make it useful** — Save properties you want to revisit and view your personal wishlist in one place.
+- **Reviews** — Share feedback on listings, with review controls that keep ownership clear.
+- **Creator-friendly listings** — Authenticated users can add, edit, and delete their own properties.
+- **Secure sessions** — Local authentication, protected routes, session storage, flash messaging, and password handling are built into the experience.
+- **Cloud image uploads** — Listing images are handled through Cloudinary for reliable media storage.
 
-- **Authentication**:
-  - Session-based authentication with secure login and registration
+## Tech stack
 
-## 🚀 Setup and Installation
+### Frontend
+
+- EJS + EJS-Mate for server-rendered views and layouts
+- HTML, CSS, and JavaScript
+- Bootstrap 5 for responsive structure
+- Font Awesome for interface icons
+- Google Fonts / Poppins for typography
+
+### Backend
+
+- Node.js
+- Express 5
+- MongoDB with Mongoose
+- Passport and Passport Local for authentication
+- Express Session with MongoDB-backed session storage
+- Joi-based listing validation
+- Method Override for REST-style update and delete actions
+- Mapbox SDK for location and map functionality
+- Cloudinary + Multer for image uploads
+
+## Core flows
+
+```text
+Discover → Filter → Open a property → Save or review
+
+Sign up → Create a listing → Upload images → Manage your property
+```
+
+## Run StayEase locally
 
 ### Prerequisites
 
-- Node.js (v22.x or above)
-- MongoDB Atlas (or local MongoDB instance)
+- Node.js 18+ recommended
+- MongoDB Atlas or a local MongoDB instance
+- Cloudinary account for image uploads
+- Mapbox credentials if map functionality is enabled in your environment
 
-### Run Locally
+### 1. Clone the repository
 
-1. **Clone the Repository**:
+```bash
+git clone https://github.com/pprachhiii/StayEase.git
+cd StayEase
+```
 
-   ```bash
-   git clone https://github.com/pprachhiii/StayEase.git
-   ```
+### 2. Install dependencies
 
-2. **Navigate to the Project**:
+```bash
+npm install
+```
 
-   ```bash
-   cd StayEase
-   ```
+### 3. Configure environment variables
 
-3. **Install Dependencies**:
+Create a `.env` file from the included example:
 
-   ```bash
-   npm install
-   ```
+```bash
+cp .env.example .env
+```
 
-4. **Set Up Environment Variables**:
-   Create a `.env` file using `.env.example`:
+Then add your own values:
 
-   ```bash
-   cp .env.example .env
-   ```
+```env
+MONGO_URI=your-mongodb-connection-string
+PORT=5000
+SESSION_SECRET_KEY=your-session-secret
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-cloudinary-api-key
+CLOUDINARY_API_SECRET=your-cloudinary-api-secret
+NODE_ENV=development
+```
 
-   Update it with your MongoDB connection string and other config values.
+Never commit real secrets or API keys.
 
-5. **Start the Server**:
+### 4. Start the app
 
-   ```bash
-   nodemon app.js
-   ```
+```bash
+node app.js
+```
 
-   Visit `http://localhost:5000` in your browser.
+For development with automatic restarts:
 
-## 🧭 Roadmap & Future Improvements
+```bash
+npx nodemon app.js
+```
 
-- **Booking System**: Let users book accommodations and manage their reservations.
-- **Payment Integration**: Add Stripe or PayPal to process payments securely.
-- **Admin Dashboard**: Admin tools to manage users, listings, and content.
-- **Advanced Search**: Include price ranges, ratings, availability filters, etc.
-- **Improved UX**: Add animations, form validation, loading indicators, and accessibility features.
+Open [http://localhost:5000](http://localhost:5000) in your browser.
 
-## 📝 License
+## Project structure
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```text
+StayEase/
+├── controllers/     # Request handling and application logic
+├── middleware/      # Authentication, validation, and error middleware
+├── models/          # Mongoose data models
+├── public/          # CSS, JavaScript, icons, and static assets
+├── routes/          # Application routes
+├── utils/           # Reusable helpers and custom errors
+├── views/           # EJS pages, layouts, and partials
+├── app.js            # Express app configuration and server entry point
+└── .env.example     # Environment variable template
+```
+
+## Roadmap
+
+- Booking and reservation management
+- Secure payment integration
+- Admin dashboard and moderation tools
+- More advanced filters for price, rating, and availability
+- Richer accessibility and interaction states
+- Additional polish for loading, validation, and empty states
+
+## Contributing
+
+Found a bug or have a feature idea? Open an issue, or fork the project and submit a pull request. Keep changes focused, explain the why, and make sure the interface stays as clean as the product experience.
+
+## License
+
+This project is available under the [MIT License](LICENSE).
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Please fork the repository, create a branch, and open a pull request with your changes.
-
----
-
-## 📌 Additional Notes
-
-- Ensure MongoDB is properly set up (e.g., using MongoDB Atlas or a local MongoDB instance).
-- The backend API must be running before the frontend is accessible for real-time messaging.
-- Make sure that the `.env` file contains the correct values for the MongoDB URI and JWT secret.
+Built with intention by [pprachhiii](https://github.com/pprachhiii).
