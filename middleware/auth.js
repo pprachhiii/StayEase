@@ -1,4 +1,4 @@
-const Listing = require("../models/listing");
+const Property = require("../models/property");
 const Review = require("../models/review");
 const { listingSchema } = require("../schema");
 const ExpressError = require("../utils/ExpressError");
@@ -44,12 +44,19 @@ module.exports.saveRedirectUrl = async (req, res, next) => {
 
 module.exports.isOwner = async (req, res, next) => {
   const { id } = req.params;
-  const listing = await Listing.findById(id);
+  const listing = await Property.findById(id);
 
-  if (!res.locals.currUser._id.equals(listing.owner._id)) {
-    req.flash("error", "Unauthorize!");
-    return res.redirect(`/listings/${id}`);
+  if (!listing) {
+    req.flash("error", "That stay no longer exists.");
+    return res.redirect("/properties");
   }
+
+  if (!listing.owner || !res.locals.currUser?._id.equals(listing.owner)) {
+    req.flash("error", "Only the owner can change this stay.");
+    return res.redirect(`/properties/${id}`);
+  }
+
+  res.locals.listing = listing;
   next();
 };
 
@@ -59,12 +66,12 @@ module.exports.isReviewAuthor = async (req, res, next) => {
 
   if (!review) {
     req.flash("error", "Review not found.");
-    return res.redirect(`/listings/${id}`);
+    return res.redirect(`/properties/${id}`);
   }
 
   if (!res.locals.currUser._id.equals(review.author)) {
     req.flash("error", "Unauthorized!");
-    return res.redirect(`/listings/${id}`);
+    return res.redirect(`/properties/${id}`);
   }
 
   next();

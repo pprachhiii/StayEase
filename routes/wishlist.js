@@ -6,14 +6,11 @@ const {
   addWishlist,
   removeWishlist,
   getWishlist,
-} = require("../controllers/wishlistController");
+} = require("../controllers/wishlist");
 
-const { isAuthenticated } = require("../middleware/authMiddleware");
+const { isLoggedIn } = require("../middleware/auth");
 
-router.get("/", isAuthenticated, getWishlist);
-
-router.post("/:propertyId", isAuthenticated, addWishlist);
-
-router.delete("/:propertyId", isAuthenticated, removeWishlist);
-
+router.post("/:propertyId", isLoggedIn, addWishlist);
+router.delete("/:propertyId", isLoggedIn, removeWishlist);
+router.get("/", isLoggedIn, getWishlist);
 module.exports = router;

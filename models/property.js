@@ -8,6 +8,11 @@ const propertySchema = new mongoose.Schema(
       trim: true,
     },
 
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
     description: {
       type: String,
       default: "",
@@ -31,6 +36,20 @@ const propertySchema = new mongoose.Schema(
         type: String,
         default: "",
         trim: true,
+      },
+    },
+
+    geometry: {
+      type: {
+        type: String,
+        enum: ["Point"],
+      },
+      coordinates: {
+        type: [Number],
+        validate: {
+          validator: (coordinates) => !coordinates || coordinates.length === 2,
+          message: "Coordinates must contain longitude and latitude.",
+        },
       },
     },
 
@@ -65,6 +84,13 @@ const propertySchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
+
+    reviewItems: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
 
     bedrooms: {
       type: Number,
@@ -143,5 +169,66 @@ const propertySchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+propertySchema.index({
+  "location.city": 1,
+});
+
+propertySchema.index({
+  "location.country": 1,
+});
+
+propertySchema.index({
+  price: 1,
+});
+
+propertySchema.index({
+  type: 1,
+});
+
+propertySchema.index({
+  rating: -1,
+  reviews: -1,
+});
+
+propertySchema.index({
+  bedrooms: 1,
+});
+
+propertySchema.index({
+  beds: 1,
+});
+
+propertySchema.index({
+  bathrooms: 1,
+});
+
+propertySchema.index({
+  amenities: 1,
+});
+
+propertySchema.index({
+  "bookingOptions.instantBook": 1,
+});
+
+propertySchema.index({
+  "bookingOptions.selfCheckIn": 1,
+});
+
+propertySchema.index({
+  "accessibility.stepFreeEntrance": 1,
+});
+
+propertySchema.index({
+  "accessibility.wideDoorways": 1,
+});
+
+propertySchema.index({
+  hostStatus: 1,
+});
+
+propertySchema.index({
+  createdAt: -1,
+});
 
 module.exports = mongoose.model("Property", propertySchema);

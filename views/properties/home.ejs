@@ -63,6 +63,16 @@
     transform:translate(-50%,-140%);opacity:0;transition:opacity .15s var(--ease);white-space:nowrap;
   }
   .globe-tooltip.show{opacity:1;}
+  .globe-hotel-card{
+    position:absolute;pointer-events:none;min-width:210px;max-width:250px;
+    background:var(--cream);color:var(--mocha-deep);padding:11px 13px;
+    border:2px solid var(--peach);border-radius:14px;box-shadow:0 8px 22px rgba(0,0,0,.2);
+    transform:translate(-50%,-118%);opacity:0;visibility:hidden;
+    transition:opacity .15s var(--ease),visibility .15s var(--ease);z-index:3;
+  }
+  .globe-hotel-card.show{opacity:1;visibility:visible;}
+  .globe-hotel-card img{display:block;width:100%;height:92px;object-fit:cover;border-radius:9px;margin-bottom:8px;}
+  .globe-hotel-card strong{display:block;font-family:var(--display);font-size:15px;line-height:1.15;margin-bottom:3px;}
   @media (max-width:880px){.hero-body{grid-template-columns:1fr;}.hero-copy{padding-right:0;}}
 
   /* wave from hero into marquee */
@@ -167,14 +177,15 @@
           go on, give it a spin
         </p>
                 <h1 class="hero-headline">Your favorite place to disappear for a weekend (or several).</h1>
-        <a class="btn" href="/listings">Explore</a>
-        <a class="btn" href="#">Become a host</a>
+        <a class="btn" href="/properties">Explore</a>
+        <a class="btn" href="/properties/new">Become a host</a>
         
       </div>
 
       <div class="globe-canvas-wrap">
         <canvas id="globeCanvas" width="600" height="600"></canvas>
         <div class="globe-tooltip" id="globeTooltip"></div>
+        <div class="globe-hotel-card" id="globeHotelCard"></div>
       </div>
     </div>
   </div>
@@ -227,25 +238,25 @@
       <div class="service-card">
         <div class="service-photo"><img src="https://picsum.photos/id/1048/300/300" alt="Loft interior with exposed brick"></div>
         <div class="service-panel">
-          <h3>Curated Stays</h3>
-          <p>Tailored to any trip, from a spontaneous weekend to your one big yearly getaway. Booking is quick and painless, we promise.</p>
-          <a href="#">Browse stays →</a>
+          <h3>Find Your Stay</h3>
+          <p>Explore real homes, rooms, boutique stays, and unique escapes by destination, price, rating, and property type.</p>
+          <a href="/properties">Explore properties →</a>
         </div>
       </div>
       <div class="service-card">
         <div class="service-photo"><img src="https://picsum.photos/id/1024/300/300" alt="Desert landscape at golden hour"></div>
         <div class="service-panel">
-          <h3>Local Experiences</h3>
-          <p>Small-group food tours, sunrise hikes, and workshops run by people who actually live there. New ones added monthly.</p>
-          <a href="#">See experiences →</a>
+          <h3>Search Your Way</h3>
+          <p>Use smart filters for bedrooms, amenities, accessibility, booking options, host status, and nightly price.</p>
+          <a href="/properties">Search stays →</a>
         </div>
       </div>
       <div class="service-card">
         <div class="service-photo"><img src="https://picsum.photos/id/1059/300/300" alt="Minimalist mountain cabin interior"></div>
         <div class="service-panel">
-          <h3>Destination Guides</h3>
-          <p>Honest, opinionated write-ups on where to go and when. We tell you which months to skip, not just the pretty ones.</p>
-          <a href="#">Read the guides →</a>
+          <h3>Become a Host</h3>
+          <p>Publish your place, add photos and details, and manage your own property listing from one simple workspace.</p>
+          <a href="/properties/new">List your property →</a>
         </div>
       </div>
     </div>
@@ -262,6 +273,8 @@
 
 <%- include('../includes/footer') %>
 
+<script id="globePropertiesData" type="application/json"><%- JSON.stringify((globeProperties || []).map(property => ({ id: property._id.toString(), name: property.title, city: property.location?.city || "", country: property.location?.country || "", price: property.price, rating: property.rating || 0, image: property.images?.[0] || "", lat: property.geometry.coordinates[1], lon: property.geometry.coordinates[0] }))).replace(/</g, "\\u003c") %></script>
+
 <script>
 const words = ['Stays','Experiences','Destinations','Quiet Escapes','Design-led Stays','Weekend Hideaways','Coastal Stays','Mountain Retreats','City Residences','Long Stays'];
 const track = document.getElementById('marqueeTrack');
@@ -273,6 +286,7 @@ track.innerHTML = loopContent + loopContent;
   const canvas = document.getElementById('globeCanvas');
   const ctx = canvas.getContext('2d');
   const tooltip = document.getElementById('globeTooltip');
+  const hotelCard = document.getElementById('globeHotelCard');
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
   const SIZE = 600;
   canvas.width = SIZE * DPR; canvas.height = SIZE * DPR;
@@ -303,13 +317,7 @@ track.innerHTML = loopContent + loopContent;
     if(isLand(lat, lon)) points.push({lat, lon});
   }
 
-  const markers = [
-    {name:'Kyoto, Japan', lat:35.0, lon:135.8},
-    {name:'Lisbon, Portugal', lat:38.7, lon:-9.1},
-    {name:'Oaxaca, Mexico', lat:17.1, lon:-96.7},
-    {name:'Cape Town, South Africa', lat:-33.9, lon:18.4},
-    {name:'Queenstown, New Zealand', lat:-45.0, lon:168.7},
-  ];
+  const markers = JSON.parse(document.getElementById('globePropertiesData').textContent);
 
   let rotY = 0.4, rotX = -0.25, autoRotate = true, dragging = false, lastX = 0, lastY = 0;
 
@@ -385,10 +393,12 @@ track.innerHTML = loopContent + loopContent;
     return {x:(clientX-rect.left)*scaleX, y:(clientY-rect.top)*scaleY, clientX, clientY, rect};
   }
   function onDown(e){ dragging = true; autoRotate = false; const p = getPos(e); lastX = p.x; lastY = p.y; }
+  let movedWhileDragging = false;
   function onMove(e){
     const p = getPos(e);
     if(dragging){
       const dx = p.x - lastX, dy = p.y - lastY;
+      if(Math.abs(dx) > 2 || Math.abs(dy) > 2) movedWhileDragging = true;
       rotY += dx * 0.006;
       rotX = Math.max(-1.1, Math.min(1.1, rotX + dy * 0.006));
       lastX = p.x; lastY = p.y;
@@ -402,18 +412,42 @@ track.innerHTML = loopContent + loopContent;
     }
     hovered = found;
     if(found){
-      tooltip.textContent = found.name;
+      tooltip.textContent = found.city || found.country || found.name;
       tooltip.classList.add('show');
+      hotelCard.innerHTML = `${found.image ? `<img src="${escapeHtml(found.image)}" alt="${escapeHtml(found.name)}">` : ''}<strong>${escapeHtml(found.name)}</strong>`;
+      hotelCard.classList.add('show');
       const wrapRect = canvas.parentElement.getBoundingClientRect();
       tooltip.style.left = (p.clientX - wrapRect.left) + 'px';
       tooltip.style.top = (p.clientY - wrapRect.top) + 'px';
+      hotelCard.style.left = (p.clientX - wrapRect.left) + 'px';
+      hotelCard.style.top = (p.clientY - wrapRect.top) + 'px';
       canvas.style.cursor = 'pointer';
     } else {
       tooltip.classList.remove('show');
+      hotelCard.classList.remove('show');
       canvas.style.cursor = dragging ? 'grabbing' : 'grab';
     }
   }
   function onUp(){ dragging = false; }
+  function escapeHtml(value){
+    return String(value).replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
+  }
+  canvas.addEventListener('click', (event) => {
+    if (movedWhileDragging) {
+      movedWhileDragging = false;
+      return;
+    }
+    const position = getPos(event);
+    const clicked = markers.find(marker => {
+      const projection = project(marker.lat, marker.lon);
+      if (!projection.visible) return false;
+      const dx = position.x - projection.x;
+      const dy = position.y - projection.y;
+      return dx * dx + dy * dy < 22 * 22;
+    });
+    if (clicked) window.location.href = `/properties/${clicked.id}`;
+    movedWhileDragging = false;
+  });
   canvas.addEventListener('mousedown', onDown);
   window.addEventListener('mousemove', onMove);
   window.addEventListener('mouseup', onUp);

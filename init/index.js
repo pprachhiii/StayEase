@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const initData = require("./data.js");
-const Listing = require("../models/listing.js");
+const Listing = require("../models/property.js");
 const path = require("path");
 const dotenv = require("dotenv");
 const fetch = require("node-fetch");
@@ -25,23 +25,26 @@ const initDB = async () => {
 
     const listingsWithGeo = [];
 
-    for (let listing of initData.data) {
-      await sleep(1000); // Wait 1 second between requests
+    for (let listing of initData) {
+      await sleep(1000);
+
+      const address = listing.location.address;
 
       const geoRes = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          listing.location
+          address,
         )}`,
         {
           headers: {
             "User-Agent": "StayEaseApp/1.0 (prachiiyadav2409@gmail.com)",
           },
-        }
+        },
       );
 
       const geoData = await geoRes.json();
 
       let geometry = null;
+
       if (geoData.length > 0) {
         geometry = {
           type: "Point",
@@ -51,7 +54,6 @@ const initDB = async () => {
 
       listingsWithGeo.push({
         ...listing,
-        owner: "6811bf9df4c6d63a846294e7",
         geometry,
       });
 

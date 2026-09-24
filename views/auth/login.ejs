@@ -155,9 +155,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
   }
 
   submitBtn.textContent = 'Logging in…';
-  setTimeout(() => { 
-    submitBtn.textContent = 'You\'re in! (demo)'; 
-  }, 900);
+  this.submit();
 });
 </script>
 

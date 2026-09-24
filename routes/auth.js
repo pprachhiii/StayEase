@@ -23,10 +23,10 @@ router
       failureRedirect: "/login",
     }),
     (req, res) => {
-      const redirectUrl = req.session.returnTo || "/";
-      delete req.session.returnTo;
+      const redirectUrl = req.session.redirectUrl || "/home";
+      delete req.session.redirectUrl;
       res.redirect(redirectUrl);
-    }
+    },
   );
 
 // Logout Route

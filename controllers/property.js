@@ -1,10 +1,93 @@
-const Property = require("../models/Property");
-const Wishlist = require("../models/Wishlist");
+const Property = require("../models/property");
+const Wishlist = require("../models/wishlist");
+
+const getImageUrl = (file) => file?.path || file?.secure_url || file?.url;
+
+const renderProperty = async (req, res) => {
+  const property = await Property.findById(req.params.id)
+    .populate("owner", "username email")
+    .populate({
+      path: "reviewItems",
+      populate: { path: "author", select: "email" },
+    });
+  if (!property) {
+    req.flash("error", "That stay no longer exists.");
+    return res.redirect("/properties");
+  }
+  return res.render("properties/show", { listing: property });
+};
+
+const newProperty = (req, res) => res.render("properties/new");
+
+const createProperty = async (req, res) => {
+  const listing = req.body.listing;
+  const images = req.files?.length
+    ? req.files.map(getImageUrl).filter(Boolean)
+    : req.file
+      ? [getImageUrl(req.file)]
+      : [];
+
+  const property = await Property.create({
+    ...listing,
+    owner: req.user._id,
+    images,
+    amenities: Array.isArray(listing.amenities)
+      ? listing.amenities
+      : listing.amenities
+        ? [listing.amenities]
+        : [],
+  });
+
+  req.flash("success", "Your stay is live.");
+  return res.redirect(`/properties/${property._id}`);
+};
+
+const editProperty = async (req, res) => {
+  const listing = await Property.findById(req.params.id);
+  if (!listing) {
+    req.flash("error", "That stay no longer exists.");
+    return res.redirect("/properties");
+  }
+  return res.render("properties/edit", { listing });
+};
+
+const updateProperty = async (req, res) => {
+  const updates = { ...req.body.listing };
+  updates.amenities = Array.isArray(updates.amenities)
+    ? updates.amenities
+    : updates.amenities
+      ? [updates.amenities]
+      : [];
+  const image = getImageUrl(req.file);
+  if (image) updates.images = [image];
+
+  const property = await Property.findByIdAndUpdate(req.params.id, updates, {
+    new: true,
+    runValidators: true,
+  });
+  if (!property) {
+    req.flash("error", "That stay no longer exists.");
+    return res.redirect("/properties");
+  }
+  req.flash("success", "Your stay was updated.");
+  return res.redirect(`/properties/${property._id}`);
+};
+
+const deleteProperty = async (req, res) => {
+  await Property.findByIdAndDelete(req.params.id);
+  req.flash("success", "Your stay was removed.");
+  return res.redirect("/properties");
+};
+
+// ========================================
+// GET FILTERED PROPERTIES
+// ========================================
 
 const getProperties = async (req, res) => {
   try {
     const {
       location,
+      search,
       price,
       type,
       rating,
@@ -17,23 +100,27 @@ const getProperties = async (req, res) => {
       stepFreeEntrance,
       wideDoorways,
       hostStatus,
-      sort,
+      sort = "recommended",
     } = req.query;
 
     const filter = {};
+    const locationQuery = (location || search || "").trim();
 
     // LOCATION
-    if (location && location.trim()) {
+    // Only filter by location when the request actually contains one.
+    if (locationQuery) {
+      const searchLocation = locationQuery;
+
       filter.$or = [
         {
           "location.city": {
-            $regex: location.trim(),
+            $regex: searchLocation,
             $options: "i",
           },
         },
         {
           "location.country": {
-            $regex: location.trim(),
+            $regex: searchLocation,
             $options: "i",
           },
         },
@@ -44,7 +131,7 @@ const getProperties = async (req, res) => {
     if (price !== undefined && price !== "") {
       const maxPrice = Number(price);
 
-      if (!Number.isNaN(maxPrice)) {
+      if (Number.isFinite(maxPrice) && maxPrice >= 0) {
         filter.price = {
           $lte: maxPrice,
         };
@@ -69,7 +156,11 @@ const getProperties = async (req, res) => {
     if (rating !== undefined && rating !== "") {
       const minimumRating = Number(rating);
 
-      if (!Number.isNaN(minimumRating)) {
+      if (
+        Number.isFinite(minimumRating) &&
+        minimumRating >= 0 &&
+        minimumRating <= 5
+      ) {
         filter.rating = {
           $gte: minimumRating,
         };
@@ -80,7 +171,7 @@ const getProperties = async (req, res) => {
     if (bedrooms !== undefined && bedrooms !== "") {
       const value = Number(bedrooms);
 
-      if (!Number.isNaN(value) && value > 0) {
+      if (Number.isFinite(value) && value > 0) {
         filter.bedrooms = {
           $gte: value,
         };
@@ -91,7 +182,7 @@ const getProperties = async (req, res) => {
     if (beds !== undefined && beds !== "") {
       const value = Number(beds);
 
-      if (!Number.isNaN(value) && value > 0) {
+      if (Number.isFinite(value) && value > 0) {
         filter.beds = {
           $gte: value,
         };
@@ -102,7 +193,7 @@ const getProperties = async (req, res) => {
     if (bathrooms !== undefined && bathrooms !== "") {
       const value = Number(bathrooms);
 
-      if (!Number.isNaN(value) && value > 0) {
+      if (Number.isFinite(value) && value > 0) {
         filter.bathrooms = {
           $gte: value,
         };
@@ -146,40 +237,38 @@ const getProperties = async (req, res) => {
       filter.hostStatus = hostStatus;
     }
 
-    // SORTING
-    let sortQuery = {
-      createdAt: -1,
-    };
+    // SORT
+    let sortQuery;
 
     switch (sort) {
       case "price-asc":
-        sortQuery = {
-          price: 1,
-        };
+        sortQuery = { price: 1, _id: 1 };
         break;
 
       case "price-desc":
-        sortQuery = {
-          price: -1,
-        };
+        sortQuery = { price: -1, _id: 1 };
         break;
 
       case "rating":
         sortQuery = {
           rating: -1,
           reviews: -1,
+          _id: 1,
         };
         break;
 
       case "reviews":
         sortQuery = {
           reviews: -1,
+          rating: -1,
+          _id: 1,
         };
         break;
 
       case "newest":
         sortQuery = {
           createdAt: -1,
+          _id: 1,
         };
         break;
 
@@ -188,17 +277,39 @@ const getProperties = async (req, res) => {
         sortQuery = {
           rating: -1,
           reviews: -1,
+          createdAt: -1,
+          _id: 1,
         };
-        break;
     }
 
     const properties = await Property.find(filter).sort(sortQuery).lean();
 
+    // FILTER OPTIONS
+    const [propertyTypes, amenitiesList, maxPriceResult] = await Promise.all([
+      Property.distinct("type"),
+      Property.distinct("amenities"),
+      Property.aggregate([
+        {
+          $group: {
+            _id: null,
+            maxPrice: {
+              $max: "$price",
+            },
+          },
+        },
+      ]),
+    ]);
+
+    const maxPriceValue = maxPriceResult[0]?.maxPrice || 400;
+
+    // WISHLIST
     let wishlistIds = [];
 
-    if (req.user?._id) {
+    const userId = req.user?._id || req.session?.userId;
+
+    if (userId) {
       const wishlist = await Wishlist.find({
-        user: req.user._id,
+        user: userId,
         property: {
           $in: properties.map((property) => property._id),
         },
@@ -209,25 +320,44 @@ const getProperties = async (req, res) => {
       wishlistIds = wishlist.map((item) => item.property.toString());
     }
 
+    // RESULT
     const result = properties.map((property) => ({
       ...property,
 
-      id: property._id,
+      id: property._id.toString(),
 
       loc: [property.location?.city, property.location?.country]
         .filter(Boolean)
         .join(", "),
 
       top: property.mapPosition?.top || "50%",
+
       left: property.mapPosition?.left || "50%",
 
       isFavorited: wishlistIds.includes(property._id.toString()),
     }));
 
-    return res.json({
-      success: true,
-      count: result.length,
+    const isAjax = req.xhr || req.headers.accept?.includes("application/json");
+
+    if (isAjax) {
+      return res.json({
+        properties: result,
+      });
+    }
+
+    // NORMAL PAGE REQUEST
+    return res.render("properties/index", {
       properties: result,
+      propertyTypes: propertyTypes.filter(Boolean).sort(),
+
+      amenities: amenitiesList.filter(Boolean).sort(),
+
+      maxPrice: maxPriceValue,
+
+      search: {
+        location: locationQuery,
+        maxPrice: maxPriceValue,
+      },
     });
   } catch (error) {
     console.error("getProperties error:", error);
@@ -239,93 +369,12 @@ const getProperties = async (req, res) => {
   }
 };
 
-const toggleWishlist = async (req, res) => {
-  try {
-    const { propertyId } = req.params;
-
-    if (!req.user?._id) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required",
-      });
-    }
-
-    const property = await Property.findById(propertyId);
-
-    if (!property) {
-      return res.status(404).json({
-        success: false,
-        message: "Property not found",
-      });
-    }
-
-    const existing = await Wishlist.findOne({
-      user: req.user._id,
-      property: propertyId,
-    });
-
-    if (existing) {
-      await Wishlist.deleteOne({
-        _id: existing._id,
-      });
-
-      return res.json({
-        success: true,
-        saved: false,
-      });
-    }
-
-    await Wishlist.create({
-      user: req.user._id,
-      property: propertyId,
-    });
-
-    return res.json({
-      success: true,
-      saved: true,
-    });
-  } catch (error) {
-    console.error("toggleWishlist error:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Unable to update wishlist",
-    });
-  }
-};
-
-const getWishlist = async (req, res) => {
-  try {
-    if (!req.user?._id) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required",
-      });
-    }
-
-    const wishlist = await Wishlist.find({
-      user: req.user._id,
-    })
-      .populate("property")
-      .sort({ createdAt: -1 })
-      .lean();
-
-    return res.json({
-      success: true,
-      wishlist,
-    });
-  } catch (error) {
-    console.error("getWishlist error:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Unable to load wishlist",
-    });
-  }
-};
-
 module.exports = {
   getProperties,
-  toggleWishlist,
-  getWishlist,
+  newProperty,
+  createProperty,
+  renderProperty,
+  editProperty,
+  updateProperty,
+  deleteProperty,
 };

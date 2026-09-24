@@ -1,0 +1,56 @@
+<% layout("/layouts/boilerplate") %>
+
+<title>Create New Listing | StayEase</title>
+<div class="container my-5 form-page">
+    <p class="form-eyebrow">share a place worth finding</p>
+    <h1 class="form-title">Become a host</h1>
+    <p class="form-intro">Add the details guests need, and update them whenever your place changes.</p>
+
+    <form action="/properties" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="listing[title]" id="title" class="form-control" placeholder="Enter title" required>
+            <div class="invalid-feedback">Please enter a title.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="listing[description]" id="description" class="form-control" rows="4" placeholder="Enter description" required></textarea>
+            <div class="invalid-feedback">Please enter a description.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" name="listing[price]" id="price" class="form-control" placeholder="Enter price" min="0" required>
+            <div class="invalid-feedback">Please enter a valid price.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="listing[location][city]" id="location" class="form-control" placeholder="Lisbon" required>
+            <div class="invalid-feedback">Please enter a location.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="country" class="form-label">Country</label>
+            <input type="text" name="listing[location][country]" id="country" class="form-control" placeholder="Portugal" required>
+            <div class="invalid-feedback">Please enter a country.</div>
+        </div>
+
+        <div class="mb-4">
+            <label for="image" class="form-label">Select Image</label>
+                        <input type="file" name="images" id="images" class="form-control" accept="image/*" multiple>
+        </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6"><label class="form-label" for="type">Property type</label><select name="listing[type]" id="type" class="form-select" required><option value="Entire home">Entire home</option><option value="Private room">Private room</option><option value="Unique stay">Unique stay</option><option value="Boutique hotel">Boutique hotel</option></select></div>
+                    <div class="col-md-2"><label class="form-label" for="bedrooms">Bedrooms</label><input class="form-control" id="bedrooms" name="listing[bedrooms]" type="number" min="0" value="1"></div>
+                    <div class="col-md-2"><label class="form-label" for="beds">Beds</label><input class="form-control" id="beds" name="listing[beds]" type="number" min="0" value="1"></div>
+                    <div class="col-md-2"><label class="form-label" for="bathrooms">Bathrooms</label><input class="form-control" id="bathrooms" name="listing[bathrooms]" type="number" min="0" value="1"></div>
+                </div>
+
+        <button type="submit" class="btn btn-primary">Publish stay</button>
+        <a href="/properties" class="btn btn-outline-secondary ms-2">Cancel</a>
+    </form>
+    
+    

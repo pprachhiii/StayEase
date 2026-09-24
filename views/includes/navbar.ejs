@@ -201,15 +201,15 @@
 <header>
   <div class="wrap nav-row">
     <!-- Left Logo -->
-    <a class="logo" href="/">StayEasy</a>
+    <a class="logo" href="/">STAYEASE</a>
 
     <!-- Center Navigation and Search -->
     <div class="nav-center" id="navCenter">
-      <a href="/listings" class="nav-link">Explore</a>
+      <a href="/properties" class="nav-link">Explore</a>
 
-      <form class="search-container" action="/listings" method="GET" id="searchForm">
+      <form class="search-container" action="/properties" method="GET" id="searchForm">
         <div class="search-input-wrap">
-          <input type="search" name="search" id="searchInput" placeholder="Search destinations..." />
+          <input type="search" name="search" id="searchInput" value="<%= typeof search !== 'undefined' ? search.location : '' %>" placeholder="Search destinations..." />
         </div>
         <button class="btn-search-toggle" type="button" id="searchToggleBtn">
           <i class="fa-solid fa-magnifying-glass"></i>
@@ -217,7 +217,7 @@
         </button>
       </form>
 
-      <a href="/listings/new" class="nav-link">Become a Host</a>
+      <a href="/properties/new" class="nav-link">Become a Host</a>
     </div>
 
     <!-- Right Actions -->
@@ -234,12 +234,11 @@
           </button>
           
           <div class="user-popover" id="userPopover">
-            <p class="user-name"><%= currUser.username %></p>
+            <p class="user-name"><%= currUser.email %></p>
             <p class="user-email"><%= currUser.email %></p>
           </div>
         </div>
 
-        <button class="btn-order btn-demo">Book Demo</button>
         <a href="/logout" class="btn-order btn-logout">
           Logout <i class="fa-solid fa-right-from-bracket"></i>
         </a>

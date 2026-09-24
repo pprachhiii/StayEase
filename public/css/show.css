@@ -1,53 +1,703 @@
-/* showListing.css */
 
-/* Listing Image */
-.card-img-top {
-    border-radius: 12px;
+:root {
+    --cream: #FCF3E8;
+    --pink: #F5C6D6;
+    --pink-soft: #F9DCE6;
+    --pink-deep: #EDA9C4;
+    --mocha: #7B5240;
+    --mocha-deep: #5A3B2E;
+    --peach: #EFAF8B;
+    --white: #FFFFFF;
+
+    --display: "Baloo 2", "Quicksand", sans-serif;
+    --sans: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.property-page {
+    min-height: calc(100vh - 78px);
+    padding: 45px 20px 90px;
+    background: var(--cream);
+    color: var(--mocha-deep);
+    font-family: var(--sans);
+}
+
+.property-wrap {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+}
+
+/* =========================================================
+   COMMON CARDS
+   ========================================================= */
+
+.property-hero,
+.review-form,
+.reviews-section,
+.map-section {
+    background: var(--white);
+    border: 3px solid var(--pink);
+    border-radius: 26px;
+    box-shadow: 0 14px 35px rgba(90, 59, 46, 0.10);
+}
+
+/* =========================================================
+   PROPERTY HERO
+   ========================================================= */
+
+.property-hero {
+    overflow: hidden;
+}
+
+/* Heading */
+
+.property-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 25px;
+    padding: 34px 38px 24px;
+}
+
+.property-eyebrow {
+    margin: 0 0 6px;
+
+    color: var(--pink-deep);
+
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 800;
+
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.property-heading h1 {
+    margin: 0;
+
+    color: var(--mocha-deep);
+
+    font-family: var(--display);
+    font-size: clamp(30px, 4vw, 46px);
+    font-weight: 800;
+
+    line-height: 1.05;
+}
+
+.property-location {
+    margin: 10px 0 0;
+
+    color: var(--mocha);
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.property-location i {
+    margin-right: 5px;
+    color: var(--pink-deep);
+}
+
+/* Rating */
+
+.property-rating {
+    flex: 0 0 auto;
+
+    padding: 9px 15px;
+
+    border-radius: 22px;
+
+    background: var(--pink-soft);
+    color: var(--mocha-deep);
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.property-rating span {
+    color: var(--peach);
+    font-size: 17px;
+}
+
+/* =========================================================
+   PROPERTY IMAGE
+   ========================================================= */
+
+.property-cover {
+    display: block;
+
+    width: 100%;
+    max-height: 520px;
+
     object-fit: cover;
 }
 
-/* Main Listing Card */
-.card {
-    border-radius: 16px;
-    background-color: #ffffff;
+/* =========================================================
+   PROPERTY BODY
+   ========================================================= */
+
+.property-body {
+    display: flex;
+    justify-content: space-between;
+
+    gap: 35px;
+
+    padding: 30px 38px 25px;
 }
 
-/* Buttons */
-.btn-primary, .btn-danger, .btn-outline-secondary {
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-weight: 500;
+.property-copy {
+    min-width: 0;
 }
 
-/* Review Section */
-.review-form {
-    background-color: #f8f9fa;
-    padding: 2rem;
-    border-radius: 12px;
-    margin-bottom: 2rem;
+.host-line {
+    margin: 0;
+
+    color: var(--mocha);
+
+    font-size: 14px;
 }
 
-/* Review Cards */
+.host-line strong {
+    color: var(--mocha-deep);
+}
+
+.property-body h2 {
+    margin: 13px 0 0;
+
+    color: var(--mocha-deep);
+
+    font-family: var(--display);
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.property-description {
+    max-width: 700px;
+
+    margin: 10px 0 0;
+
+    color: var(--mocha);
+
+    font-size: 15px;
+    font-weight: 600;
+
+    line-height: 1.75;
+}
+
+/* Price */
+
+.property-price {
+    flex: 0 0 auto;
+
+    align-self: center;
+
+    text-align: right;
+    color: var(--mocha-deep);
+}
+
+.property-price strong {
+    display: block;
+
+    font-family: var(--display);
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.property-price span {
+    color: var(--mocha);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   PROPERTY FACTS
+   ========================================================= */
+
+.property-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    padding: 20px 38px;
+
+    border-top: 2px solid var(--pink-soft);
+    border-bottom: 2px solid var(--pink-soft);
+}
+
+.property-facts span {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 10px 14px;
+
+    border-radius: 18px;
+
+    background: var(--cream);
+    color: var(--mocha);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.property-facts i {
+    margin-right: 7px;
+
+    color: var(--pink-deep);
+}
+
+.property-facts strong {
+    margin-right: 4px;
+
+    color: var(--mocha-deep);
+    font-weight: 800;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.property-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    padding: 23px 38px 31px;
+}
+
+.property-actions form {
+    margin: 0;
+}
+
+.stay-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border: none;
+    border-radius: 18px;
+
+    padding: 11px 18px;
+
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 800;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.stay-button:hover {
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.stay-button-primary {
+    background: var(--mocha-deep);
+    color: var(--cream);
+}
+
+.stay-button-primary:hover {
+    background: var(--mocha);
+    color: var(--cream);
+    box-shadow: 0 7px 16px rgba(90, 59, 46, 0.20);
+}
+
+.stay-button-danger {
+    background: #D9694F;
+    color: var(--white);
+}
+
+.stay-button-danger:hover {
+    background: #B4523B;
+    color: var(--white);
+}
+
+.stay-button-light {
+    margin-left: auto;
+
+    background: var(--pink-soft);
+    color: var(--mocha-deep);
+}
+
+.stay-button-light:hover {
+    background: var(--pink);
+    color: var(--mocha-deep);
+}
+
+/* =========================================================
+   REVIEW FORM
+   ========================================================= */
+
+.review-form,
+.reviews-section,
+.map-section {
+    margin-top: 30px;
+    padding: 30px 34px;
+}
+
+.review-form h2,
+.reviews-section h2,
+.map-section h2 {
+    margin: 0 0 20px;
+
+    color: var(--mocha-deep);
+
+    font-family: var(--display);
+    font-size: 29px;
+    font-weight: 800;
+}
+
+/* =========================================================
+   REVIEW FIELDS
+   ========================================================= */
+
+.review-field {
+    margin-bottom: 18px;
+}
+
+.review-field label,
+.review-field .form-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--mocha-deep);
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.review-field .form-control {
+    width: 100%;
+
+    border: 2px solid var(--pink-deep);
+    border-radius: 13px;
+
+    background: var(--cream);
+    color: var(--mocha-deep);
+
+    font-family: var(--sans);
+    font-weight: 600;
+
+    padding: 11px 14px;
+
+    box-shadow: none;
+}
+
+.review-field .form-control:focus {
+    border-color: var(--mocha);
+    box-shadow: 0 0 0 3px rgba(237, 169, 196, 0.25);
+    outline: none;
+}
+
+/* =========================================================
+   REVIEW STARS
+   ========================================================= */
+
+.review-stars {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 4px;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+}
+
+.review-star {
+    border: 0;
+
+    padding: 0 3px;
+
+    background: transparent;
+    color: var(--pink-deep);
+
+    font-size: 32px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.review-star:hover,
+.review-star.selected {
+    color: var(--peach);
+}
+
+.review-star:hover {
+    transform: translateY(-2px) scale(1.05);
+}
+
+/* =========================================================
+   REVIEWS
+   ========================================================= */
+
+.review-grid {
+    display: grid;
+
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(230px, 1fr)
+    );
+
+    gap: 17px;
+}
+
 .review-card {
-    background-color: #ffffff;
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+
+    min-height: 175px;
+
+    padding: 20px;
+
+    border: 2px solid var(--pink-soft);
+    border-radius: 18px;
+
+    background: var(--cream);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .review-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 10px 22px rgba(90, 59, 46, 0.10);
 }
 
-/* Star Badge */
-.badge {
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
+.review-author {
+    margin: 0 0 9px;
+
+    color: var(--mocha-deep);
+
+    font-size: 14px;
 }
 
-/* Form Validation */
-.was-validated .form-control:invalid,
-.form-control.is-invalid {
-    border-color: #dc3545;
+.review-comment {
+    margin: 9px 0 18px;
+
+    color: var(--mocha);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    line-height: 1.65;
+}
+
+.review-card form {
+    margin-top: auto;
+}
+
+.review-card .stay-button {
+    padding: 7px 12px;
+    font-size: 12px;
+}
+
+/* Starability compatibility */
+
+.starability-result {
+    margin: 0 0 5px;
+}
+
+/* =========================================================
+   MAP
+   ========================================================= */
+
+.map-section h2 {
+    margin-bottom: 18px;
+}
+
+.map-section #map {
+    width: 100%;
+    height: 400px;
+
+    overflow: hidden;
+
+    border: 3px solid var(--pink);
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 20px rgba(90, 59, 46, 0.08);
+}
+
+/* Leaflet fixes */
+
+.map-section .leaflet-container {
+    font-family: var(--sans);
+}
+
+/* =========================================================
+   BOOTSTRAP OVERRIDES
+   ========================================================= */
+
+.property-page .container {
+    max-width: none;
+}
+
+.property-page .btn {
+    font-family: var(--sans);
+}
+
+.property-page .rounded {
+    border-radius: 18px !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .property-page {
+        padding: 30px 15px 65px;
+    }
+
+    .property-heading {
+        padding: 28px 25px 20px;
+    }
+
+    .property-body {
+        padding: 25px;
+    }
+
+    .property-facts {
+        padding: 18px 25px;
+    }
+
+    .property-actions {
+        padding: 20px 25px 26px;
+    }
+
+    .property-price {
+        text-align: left;
+    }
+
+    .stay-button-light {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .property-page {
+        padding: 20px 10px 50px;
+    }
+
+    .property-heading {
+        flex-direction: column;
+
+        gap: 14px;
+
+        padding: 23px 20px 18px;
+    }
+
+    .property-heading h1 {
+        font-size: 32px;
+    }
+
+    .property-body {
+        flex-direction: column;
+
+        gap: 15px;
+
+        padding: 22px 20px;
+    }
+
+    .property-price {
+        align-self: flex-start;
+
+        text-align: left;
+    }
+
+    .property-facts {
+        padding: 17px 20px;
+    }
+
+    .property-actions {
+        padding: 18px 20px 23px;
+    }
+
+    .review-form,
+    .reviews-section,
+    .map-section {
+        padding: 23px 18px;
+    }
+
+    .review-form h2,
+    .reviews-section h2,
+    .map-section h2 {
+        font-size: 25px;
+    }
+
+    .review-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .map-section #map {
+        height: 330px;
+    }
+}
+
+@media (max-width: 450px) {
+
+    .property-cover {
+        max-height: 350px;
+    }
+
+    .property-facts {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .property-facts span {
+        width: 100%;
+    }
+
+    .property-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .stay-button {
+        width: 100%;
+    }
+
+    .property-actions form {
+        width: 100%;
+    }
+
+    .property-actions form .stay-button {
+        width: 100%;
+    }
+
+    .stay-button-light {
+        width: 100%;
+    }
+}
+
+a {
+    text-decoration: none;
 }

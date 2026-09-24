@@ -1,0 +1,127 @@
+<% layout("/layouts/boilerplate") %>
+
+<title><%= listing.title %> | StayEase</title>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script>
+  const coordinates = JSON.parse('<%- JSON.stringify(listing.geometry?.coordinates || [77.2090, 28.6139]) %>');
+</script>
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+<main class="property-page">
+  <div class="property-wrap">
+
+  <!-- Listing Card -->
+  <section class="property-hero">
+    <div class="property-heading">
+      <div>
+        <p class="property-eyebrow"><%= listing.type || "Stay" %></p>
+        <h1><%= listing.title %></h1>
+        <p class="property-location"><i class="fa-solid fa-location-dot"></i> <%= listing.location?.city %>, <%= listing.location?.country %></p>
+      </div>
+      <div class="property-rating"><span>★</span> <%= Number(listing.rating || 0).toFixed(2) %></div>
+    </div>
+
+    <% if (listing.images?.length) { %><img src="<%= listing.images[0] %>" alt="<%= listing.title %>" class="property-cover"><% } %>
+
+    <div class="property-body">
+      <div class="property-copy">
+        <p class="host-line">Hosted by <strong><%= listing.owner?.email || "StayEase host" %></strong></p>
+        <h2>A place with a little more character.</h2>
+        <p class="property-description"><%= listing.description %></p>
+      </div>
+      <div class="property-price"><strong>₹<%= listing.price.toLocaleString("en-IN") %></strong><span>night</span></div>
+    </div>
+
+    <div class="property-facts">
+      <span><i class="fa-solid fa-house"></i><strong><%= listing.type || "Stay" %></strong></span>
+      <span><i class="fa-solid fa-bed"></i><strong><%= listing.bedrooms || 0 %></strong> bedrooms</span>
+      <span><i class="fa-solid fa-bed"></i><strong><%= listing.beds || 0 %></strong> beds</span>
+      <span><i class="fa-solid fa-bath"></i><strong><%= listing.bathrooms || 0 %></strong> baths</span>
+    </div>
+
+    <div class="property-actions">
+    <% if(currUser && listing.owner && currUser._id.equals(listing.owner._id)) {%>
+      <a href="/properties/<%= listing._id %>/edit" class="stay-button stay-button-primary"><i class="fa-solid fa-pen"></i> Edit stay</a>
+
+      <form action="/properties/<%= listing._id %>?_method=DELETE" method="POST">
+        <button type="submit" class="stay-button stay-button-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+      </form>
+    <%}%>
+
+      <a href="/properties" class="stay-button stay-button-light"><i class="fa-solid fa-arrow-left"></i> Back to stays</a>
+    </div>
+  </section>
+
+  <!-- Review Form -->
+   <% if(currUser){ %>
+  <section class="review-form">
+    <p class="property-eyebrow">A note for the next guest</p>
+    <h2>Leave a review</h2>
+    <form method="POST" action="/properties/<%= listing.id %>/reviews" class="needs-validation" novalidate>
+      <div class="review-field">
+        <label for="rating" class="form-label">Rating</label>
+        <fieldset class="review-stars" aria-label="Choose a rating">
+          <input type="hidden" name="review[rating]" id="reviewRating" required>
+          <% [1, 2, 3, 4, 5].forEach(rating => { %>
+            <button type="button" class="review-star" data-rating="<%= rating %>" aria-label="<%= rating %> star<%= rating === 1 ? '' : 's' %>">★</button>
+          <% }) %>
+        </fieldset>
+      </div>
+      <div class="review-field">
+        <label for="comment" class="form-label">Comments</label>
+        <textarea class="form-control" id="comment" name="review[comment]" rows="5" required></textarea>
+        <div class="invalid-feedback">Please write a comment.</div>
+      </div>
+      <button class="stay-button stay-button-primary" type="submit">Submit review</button>
+    </form>
+  </section>
+  <% } %>
+
+    <!-- All Reviews -->
+    <% if(listing.reviewItems?.length>0){ %>
+      <section class="reviews-section">
+        <h2>Guest notes</h2>
+        <div class="review-grid">
+        <% for(let review of listing.reviewItems){ %>
+          <article class="review-card">
+                
+                <p class="review-author"><strong><%= review.author?.email || "Guest" %></strong></p>
+                <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
+                <p class="review-comment"><%= review.comment %></p>
+                <form action="/properties/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="mt-auto">
+                  <button type="submit" class="stay-button stay-button-danger">Delete</button>
+                </form>
+          </article>
+        <% } %>
+        </div>
+      </section>
+  
+    <% } %>
+    
+  <!-- Map Section -->
+  <section class="map-section">
+    <h2>Where you'll be</h2>
+    <div id="map" class="rounded shadow-sm" style="height: 400px;"></div>
+  </section>
+
+</div>
+</main>
+<script>
+  document.querySelectorAll('.review-star').forEach((star) => {
+    star.addEventListener('click', () => {
+      const rating = star.dataset.rating;
+      document.getElementById('reviewRating').value = rating;
+      document.querySelectorAll('.review-star').forEach((item) => {
+        item.classList.toggle('selected', Number(item.dataset.rating) <= Number(rating));
+      });
+    });
+  });
+</script>
+<script src="/js/map.js"></script>

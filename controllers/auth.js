@@ -6,17 +6,25 @@ module.exports.showRegisterForm = async (req, res) => {
 
 module.exports.registerUser = async (req, res, next) => {
   try {
-    let { username, email, password } = req.body;
+    const { email, password } = req.body;
+    const normalizedEmail = String(email || "")
+      .trim()
+      .toLowerCase();
+
+    if (!normalizedEmail || !password) {
+      req.flash("error", "Email and password are required.");
+      return res.redirect("/register");
+    }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       req.flash("error", "User already exists with this email");
       return res.redirect("/register");
     }
 
     // Create new User
-    const newUser = new User({ username, email });
+    const newUser = new User({ email: normalizedEmail });
 
     // Register user with password
     await User.register(newUser, password); // passport-local-mongoose handles hashing
@@ -41,14 +49,14 @@ module.exports.showLoginForm = async (req, res) => {
 };
 
 module.exports.loginUser = async (req, res) => {
-  let redirectUrl = res.locals.redirectUrl || "/home"; // Use the redirectUrl from saveRedirectUrl middleware
+  let redirectUrl = res.locals.redirectUrl || "/home";
   res.redirect(redirectUrl);
 };
 
 module.exports.logoutUser = async (req, res) => {
   req.logout((err) => {
     if (err) {
-      return next(err);
+      return res.redirect("/home");
     }
     req.flash("success", "Logout successful!");
     res.redirect("/home");

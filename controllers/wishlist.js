@@ -3,7 +3,7 @@ const Wishlist = require("../models/wishlist");
 // Add property to wishlist
 exports.addWishlist = async (req, res, next) => {
   try {
-    const userId = req.session.userId;
+    const userId = req.user._id;
     const propertyId = req.params.propertyId;
 
     const existing = await Wishlist.findOne({
@@ -35,7 +35,7 @@ exports.addWishlist = async (req, res, next) => {
 // Remove property
 exports.removeWishlist = async (req, res, next) => {
   try {
-    const userId = req.session.userId;
+    const userId = req.user._id;
     const propertyId = req.params.propertyId;
 
     await Wishlist.findOneAndDelete({
@@ -56,7 +56,7 @@ exports.removeWishlist = async (req, res, next) => {
 exports.getWishlist = async (req, res, next) => {
   try {
     const wishlist = await Wishlist.find({
-      user: req.session.userId,
+      user: req.user._id,
     }).populate("property");
 
     res.json({

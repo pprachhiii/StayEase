@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Almanac — Stays in Portugal</title>
+<title>StayEase</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
@@ -37,7 +37,59 @@
   @media (max-width:900px){.nav-pills{display:none;}}
 
   .toolbar{position:sticky;top:var(--header-h);z-index:55;background:var(--pink-soft);border-bottom:3px solid var(--pink-deep);}
-  .toolbar-inner{display:flex;align-items:center;justify-content:space-between;height:var(--toolbar-h);gap:20px;}
+.toolbar-inner{
+  display:flex;
+  align-items:center;
+  height:var(--toolbar-h);
+  gap:14px;
+  min-width:0;
+  flex-wrap:nowrap;
+}
+
+.filter-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  overflow-x:auto;
+  overflow-y:visible;
+  flex:1 1 auto;
+  min-width:0;
+  scrollbar-width:none;
+  white-space:nowrap;
+}
+
+.filter-row::-webkit-scrollbar{
+  display:none;
+}
+
+.filter-row > *{
+  flex:0 0 auto;
+}
+
+.toolbar-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex:0 0 auto;
+  margin-left:auto;
+  white-space:nowrap;
+}
+
+.sort-wrap{
+  position:relative;
+  width:max-content;
+  flex:0 0 auto;
+}
+
+.sort-btn{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-size:13px;
+  font-weight:700;
+  padding:8px 4px;
+  white-space:nowrap;
+}
   .search-summary{display:flex;align-items:center;border:2px solid var(--pink-deep);border-radius:26px;padding:4px 6px;background:var(--white);flex-shrink:0;}
   .search-summary button.seg{padding:8px 16px;font-size:13px;border-radius:20px;transition:background .2s var(--ease);display:flex;flex-direction:column;align-items:flex-start;line-height:1.2;}
   .search-summary button.seg:hover{background:var(--pink-soft);}
@@ -47,16 +99,12 @@
   .search-summary .edit-btn{width:36px;height:36px;border-radius:50%;background:var(--mocha-deep);color:var(--cream);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:2px;transition:transform .2s var(--bounce);}
   .search-summary .edit-btn:hover{transform:rotate(-14deg) scale(1.06);}
 
-  .filter-row{display:flex;align-items:center;gap:10px;overflow-x:auto;flex:1;scrollbar-width:none;}
   .filter-row::-webkit-scrollbar{display:none;}
   .chip{display:flex;align-items:center;gap:6px;white-space:nowrap;border:2px solid var(--pink-deep);border-radius:22px;padding:8px 15px;font-size:13px;font-weight:700;background:var(--white);transition:border-color .2s var(--ease), background .2s var(--ease), transform .18s var(--bounce);position:relative;}
   .chip:hover{transform:translateY(-2px);}
   .chip.active{background:var(--mocha-deep);color:var(--cream);border-color:var(--mocha-deep);}
   .chip svg{width:13px;height:13px;}
 
-  .toolbar-right{display:flex;align-items:center;gap:14px;flex-shrink:0;}
-  .sort-wrap{position:relative;width:120px;}
-  .sort-btn{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;padding:8px 4px;}
   .sort-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--white);border:2px solid var(--pink-deep);border-radius:14px;box-shadow:0 8px 24px rgba(90,59,46,0.12);min-width:190px;padding:6px;opacity:0;visibility:hidden;transform:translateY(-6px) scale(0.98);transition:opacity .18s var(--bounce), transform .18s var(--bounce), visibility .18s;z-index:70;}
   .sort-menu.open{opacity:1;visibility:visible;transform:translateY(0) scale(1);}
   .sort-option{display:flex;justify-content:space-between;padding:9px 12px;border-radius:10px;font-size:13.5px;font-weight:700;width:100%;text-align:left;}
@@ -64,13 +112,13 @@
   .sort-option.selected{color:var(--mocha-deep);background:var(--pink-soft);}
   .map-toggle{display:none;}
 
-  .popover{position:absolute;top:calc(100% + 10px);left:0;background:var(--white);border:2px solid var(--pink-deep);border-radius:18px;box-shadow:0 12px 30px rgba(90,59,46,0.14);padding:20px;width:280px;opacity:0;visibility:hidden;transform:translateY(-6px) scale(0.98);transition:opacity .18s var(--bounce), transform .18s var(--bounce), visibility .18s;z-index:70;}
+  .popover{position:fixed;top:0;left:0;background:var(--white);border:2px solid var(--pink-deep);border-radius:18px;box-shadow:0 12px 30px rgba(90,59,46,0.14);padding:20px;width:280px;opacity:0;visibility:hidden;transform:translateY(-6px) scale(0.98);transition:opacity .18s var(--bounce), transform .18s var(--bounce), visibility .18s;z-index:120;}
   .popover.open{opacity:1;visibility:visible;transform:translateY(0) scale(1);}
   .popover h5{margin:0 0 14px;font-family:var(--display);font-size:15px;font-weight:700;}
   .popover-actions{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:2px solid var(--pink-soft);}
   .link-btn{font-size:13px;font-weight:700;text-decoration:underline;color:var(--mocha);}
   .price-range-label{font-family:var(--display);font-size:16px;font-weight:700;margin-bottom:10px;color:var(--mocha-deep);}
-  input[type=range]{width:100%;-webkit-appearance:none;height:6px;border-radius:4px;background:var(--pink-soft);outline:none;}
+  input[type=range]{width:100%;appearance:none;-webkit-appearance:none;height:6px;border-radius:4px;background:var(--pink-soft);outline:none;}
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--mocha-deep);cursor:pointer;border:3px solid var(--white);box-shadow:0 0 0 2px var(--pink-deep);}
   .radio-chip-row{display:flex;gap:8px;flex-wrap:wrap;}
   .radio-chip{border:2px solid var(--pink-deep);border-radius:16px;padding:7px 13px;font-size:13px;font-weight:700;transition:transform .18s var(--bounce);}
@@ -179,19 +227,6 @@
     
 <div class="toolbar">
   <div class="wrap toolbar-inner">
-    <div class="search-summary">
-      <button class="seg"><span class="l1"><%= search?.location || '' %></span>
-<span class="l2">Where</span></button>
-      <div class="divider"></div>
-      <button class="seg"><span class="l1"><%= search?.dates || '' %></span>
-When</span></button>
-      <div class="divider"></div>
-      <button class="seg"><span class="l1"><%= search?.guests || '' %></span>
-<span class="l2">Who</span></button>
-      <button class="edit-btn" aria-label="Search">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
-    </div>
 
 
 
@@ -207,50 +242,72 @@ When</span></button>
         <div class="popover" id="pricePop">
           <h5>What's the damage?</h5>
           <p class="price-range-label" id="priceLabel">up to $400 / night</p>
-          <input type="range" id="priceSlider" min="80" max="400" step="10" value="400">
+<input
+  type="range"
+  id="priceSlider"
+  min="0"
+  max="<%= typeof search !== 'undefined' && search?.maxPrice ? search.maxPrice : maxPrice %>"
+  step="10"
+  value="<%= typeof search !== 'undefined' && search?.maxPrice ? search.maxPrice : maxPrice %>"
+>
           <div class="popover-actions">
             <button class="link-btn" id="priceClear">Clear</button>
             <button class="btn-order" style="padding:8px 18px;" id="priceApply">Apply</button>
           </div>
         </div>
       </div>
+<div style="position:relative;">
+  <button class="chip" id="typeChip" data-pop="typePop">
+    Property type
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </button>
 
-      <div style="position:relative;">
-        <button class="chip" id="typeChip" data-pop="typePop">
-          Property type
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div class="popover" id="typePop">
-          <h5>Pick your vibe</h5>
-          <label class="check-row"><input type="checkbox" value="Entire home"> Entire home</label>
-          <label class="check-row"><input type="checkbox" value="Private room"> Private room</label>
-          <label class="check-row"><input type="checkbox" value="Unique stay"> Unique stay</label>
-          <label class="check-row"><input type="checkbox" value="Boutique hotel"> Boutique hotel</label>
-          <div class="popover-actions">
-            <button class="link-btn" id="typeClear">Clear</button>
-            <button class="btn-order" style="padding:8px 18px;" id="typeApply">Apply</button>
-          </div>
-        </div>
-      </div>
+  <div class="popover" id="typePop">
+    <h5>Pick your vibe</h5>
 
-      <div style="position:relative;">
-        <button class="chip" id="ratingChip" data-pop="ratingPop">
-          Rating
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div class="popover" id="ratingPop" style="width:240px;">
-          <h5>How fussy are we?</h5>
-          <div class="radio-chip-row" id="ratingChips">
-            <button class="radio-chip selected" data-val="0">Any</button>
-            <button class="radio-chip" data-val="4.5">4.5 +</button>
-            <button class="radio-chip" data-val="4.9">4.9 +</button>
-          </div>
-        </div>
-      </div>
+    <div class="amenity-grid">
+      <% propertyTypes.forEach(type => { %>
+        <label class="check-row">
+          <input type="checkbox" value="<%= type %>">
+          <%= type %>
+        </label>
+      <% }) %>
+    </div>
 
-      <button class="chip">Bedrooms</button>
-      <button class="chip">Amenities</button>
-      <button class="chip">Accessibility</button>
+    <div class="popover-actions">
+      <button class="link-btn" id="typeClear">Clear</button>
+      <button class="btn-order" style="padding:8px 18px;" id="typeApply">
+        Apply
+      </button>
+    </div>
+  </div>
+</div>
+
+<div style="position:relative;">
+  <button class="chip" id="ratingChip" data-pop="ratingPop">
+    Rating
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </button>
+
+  <div class="popover" id="ratingPop" style="width:240px;">
+    <h5>How fussy are we?</h5>
+
+    <div class="radio-chip-row" id="ratingChips">
+      <button class="radio-chip selected" data-val="0">Any</button>
+      <button class="radio-chip" data-val="4.5">4.5 +</button>
+      <button class="radio-chip" data-val="4.9">4.9 +</button>
+    </div>
+  </div>
+</div>
+
+
+      <button class="chip" id="bedroomsChip">Bedrooms</button>
+      <button class="chip" id="amenitiesChip">Amenities</button>
+      <button class="chip" id="accessibilityChip">Accessibility</button>
       <button class="chip" id="allFiltersBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
         All filters
@@ -278,11 +335,7 @@ When</span></button>
 
 <div class="browse-layout">
   <div class="results-col">
-<h1 class="results-heading">
-  Stays in <%= search?.location || '' %>
-</h1>
     <p class="results-count" id="resultsCount"></p>
-    <p class="results-quip">good taste, several options</p>
     <div class="result-grid" id="resultGrid"></div>
     <div class="no-results" id="noResults" style="display:none;">
       <svg class="doodle" viewBox="0 0 64 64" fill="none" stroke="var(--mocha-deep)" stroke-width="1.6">
@@ -331,43 +384,56 @@ When</span></button>
     </button>
   </div>
   <div class="drawer-body">
-    <div class="drawer-section">
+    <div class="drawer-section" id="priceFilterSection">
       <h4>Price range</h4>
       <p class="price-range-label" id="drawerPriceLabel">up to $400 / night</p>
-      <input type="range" id="drawerPriceSlider" min="80" max="400" step="10" value="400">
+<input
+  type="range"
+  id="drawerPriceSlider"
+  min="0"
+  max="<%= typeof search !== 'undefined' && search?.maxPrice ? search.maxPrice : maxPrice %>"
+  step="10"
+  value="<%= typeof search !== 'undefined' && search?.maxPrice ? search.maxPrice : maxPrice %>"
+>
     </div>
-    <div class="drawer-section">
+    <div class="drawer-section" id="roomsFilterSection">
       <h4>Rooms and beds</h4>
       <div class="stepper-row">Bedrooms <div class="stepper"><button data-t="bed" data-d="-1">–</button><span id="bedVal">Any</span><button data-t="bed" data-d="1">+</button></div></div>
       <div class="stepper-row">Beds <div class="stepper"><button data-t="beds" data-d="-1">–</button><span id="bedsVal">Any</span><button data-t="beds" data-d="1">+</button></div></div>
       <div class="stepper-row">Bathrooms <div class="stepper"><button data-t="bath" data-d="-1">–</button><span id="bathVal">Any</span><button data-t="bath" data-d="1">+</button></div></div>
     </div>
-    <div class="drawer-section">
-      <h4>Property type</h4>
-      <div class="amenity-grid" id="drawerTypeGrid">
-        <label class="check-row"><input type="checkbox" value="Entire home"> Entire home</label>
-        <label class="check-row"><input type="checkbox" value="Private room"> Private room</label>
-        <label class="check-row"><input type="checkbox" value="Unique stay"> Unique stay</label>
-        <label class="check-row"><input type="checkbox" value="Boutique hotel"> Boutique hotel</label>
-      </div>
-    </div>
-    <div class="drawer-section">
-      <h4>Amenities</h4>
-      <div class="amenity-grid">
-        <label class="check-row"><input type="checkbox"> Wi-Fi</label>
-        <label class="check-row"><input type="checkbox"> Kitchen</label>
-        <label class="check-row"><input type="checkbox"> Workspace</label>
-        <label class="check-row"><input type="checkbox"> Parking</label>
-        <label class="check-row"><input type="checkbox"> Pool</label>
-        <label class="check-row"><input type="checkbox"> Washer</label>
-      </div>
-    </div>
-    <div class="drawer-section">
+<div class="drawer-section" id="typeFilterSection">
+  <h4>Property type</h4>
+
+  <div class="amenity-grid" id="drawerTypeGrid">
+    <% propertyTypes.forEach(type => { %>
+      <label class="check-row">
+        <input type="checkbox" value="<%= type %>">
+        <%= type %>
+      </label>
+    <% }) %>
+  </div>
+</div>
+
+<div class="drawer-section" id="amenitiesFilterSection">
+  <h4>Amenities</h4>
+
+  <div class="amenity-grid" id="drawerAmenityGrid">
+    <% amenities.forEach(amenity => { %>
+      <label class="check-row">
+        <input type="checkbox" value="<%= amenity %>">
+        <%= amenity %>
+      </label>
+    <% }) %>
+  </div>
+</div>
+
+    <div class="drawer-section" id="bookingFilterSection">
       <h4>Booking options</h4>
       <div class="toggle-row">Instant book <div class="switch" data-switch></div></div>
       <div class="toggle-row">Self check-in <div class="switch" data-switch></div></div>
     </div>
-    <div class="drawer-section">
+    <div class="drawer-section" id="accessibilityFilterSection">
       <h4>Accessibility</h4>
       <div class="toggle-row">Step-free entrance <div class="switch" data-switch></div></div>
       <div class="toggle-row">Wide doorways <div class="switch" data-switch></div></div>
@@ -375,8 +441,8 @@ When</span></button>
     <div class="drawer-section" style="border-bottom:none;">
       <h4>Host status</h4>
       <div class="radio-chip-row">
-        <button class="radio-chip selected">Any host</button>
-        <button class="radio-chip">Superhost only</button>
+        <button class="radio-chip selected" data-host="">Any host</button>
+        <button class="radio-chip" data-host="Superhost">Superhost only</button>
       </div>
     </div>
   </div>
@@ -388,17 +454,31 @@ When</span></button>
 
 <div class="toast" id="toast"></div>
 
+<script id="maxPriceData" type="application/json"><%= JSON.stringify(Number(maxPrice || 0)) %></script>
 
 
 <%- include('../includes/footer') %>
 
 <script>
-const properties = "<%- JSON.stringify(properties) %>";
 
-let state = { price: 400, types: new Set(), rating: 0 };
+let state = {
+  price: null,
+  types: new Set(),
+  rating: 0,
+  bedrooms: 0,
+  beds: 0,
+  bathrooms: 0,
+  amenities: new Set(),
+  instantBook: false,
+  selfCheckIn: false,
+  stepFreeEntrance: false,
+  wideDoorways: false,
+  hostStatus: null
+};
 let hoveredId = null;
 let sortKey = 'recommended';
 const favorited = new Set();
+const maxAvailablePrice = JSON.parse(document.getElementById('maxPriceData').textContent);
 
 const resultGrid = document.getElementById('resultGrid');
 const resultsCount = document.getElementById('resultsCount');
@@ -408,95 +488,239 @@ const mapWrap = document.getElementById('mapWrap');
 const quips = ['good taste, several options', 'these all made the cut', 'curated, not just filtered', 'worth the scroll'];
 
 async function loadProperties() {
-
   const params = new URLSearchParams();
 
-  params.set("price", state.price);
+const location = "<%= typeof search !== 'undefined' && search?.location ? search.location : '' %>";
 
-  if (state.rating) {
+if (location.trim()) {
+  params.set("location", location.trim());
+}
+
+
+  if (state.price !== null) {
+    params.set("price", state.price);
+  }
+
+  if (state.rating > 0) {
     params.set("rating", state.rating);
   }
 
   if (state.types.size) {
-    params.set(
-      "type",
-      [...state.types].join(",")
-    );
+    params.set("type", [...state.types].join(","));
   }
 
-  if (sortKey) {
-    params.set("sort", sortKey);
+  if (state.bedrooms > 0) {
+    params.set("bedrooms", state.bedrooms);
   }
 
-  const response = await fetch(
-    `/properties?${params.toString()}`
-  );
+  if (state.beds > 0) {
+    params.set("beds", state.beds);
+  }
 
-  const data = await response.json();
+  if (state.bathrooms > 0) {
+    params.set("bathrooms", state.bathrooms);
+  }
 
-  console.log(data);
+  if (state.amenities.size) {
+    params.set("amenities", [...state.amenities].join(","));
+  }
+
+  if (state.instantBook) {
+    params.set("instantBook", "true");
+  }
+
+  if (state.selfCheckIn) {
+    params.set("selfCheckIn", "true");
+  }
+
+  if (state.stepFreeEntrance) {
+    params.set("stepFreeEntrance", "true");
+  }
+
+  if (state.wideDoorways) {
+    params.set("wideDoorways", "true");
+  }
+
+  if (state.hostStatus) {
+    params.set("hostStatus", state.hostStatus);
+  }
+
+  params.set("sort", sortKey);
+
+const response = await fetch(`/properties?${params.toString()}`, {
+  headers: {
+    "X-Requested-With": "XMLHttpRequest",
+    Accept: "application/json"
+  }
+});
+
+if (!response.ok) {
+  throw new Error(`Failed to load properties: ${response.status}`);
 }
 
-function sorted(list){
-  const l = [...list];
-  if(sortKey==='price-asc') l.sort((a,b)=>a.price-b.price);
-  else if(sortKey==='price-desc') l.sort((a,b)=>b.price-a.price);
-  else if(sortKey==='rating') l.sort((a,b)=>b.rating-a.rating);
-  else if(sortKey==='reviews') l.sort((a,b)=>b.reviews-a.reviews);
-  else if(sortKey==='newest') l.sort((a,b)=>a.added-b.added);
-  return l;
+const data = await response.json();
+
+render(data.properties || []);
+
 }
 
-function cardHTML(p){
-  const imgs = p.images.map(src=>`<img src="${src}" alt="${p.title}" loading="lazy">`).join('');
-  const dots = p.images.map((_,i)=>`<span class="${i===0?'active':''}"></span>`).join('');
+  
+
+function cardHTML(p) {
+  const images = Array.isArray(p.images) ? p.images : [];
+
+  const imgs = images
+    .map(
+      (src) => `
+        <img
+          src="${src}"
+          alt="${p.title || "Property"}"
+          loading="lazy"
+        >
+      `
+    )
+    .join("");
+
+  const dots = images
+    .map(
+      (_, i) =>
+        `<span class="${i === 0 ? "active" : ""}"></span>`
+    )
+    .join("");
+
+  const location = [
+    p.location?.city,
+    p.location?.country,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
   return `
     <div class="card" data-id="${p.id}">
-      <div class="card-photo" data-idx="0" data-count="${p.images.length}">
-        <div class="track">${imgs}</div>
-        <span class="vibe-tag">${p.vibe}</span>
-        ${p.images.length>1?`
-          <button class="card-arrow left" aria-label="Previous photo"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5A3B2E" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
-          <button class="card-arrow right" aria-label="Next photo"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5A3B2E" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
-          <div class="card-dots">${dots}</div>`:''}
-        <button class="fav-btn ${favorited.has(p.id)?'active':''}" aria-label="Save to wishlist">
-          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.1C.5 8.2 2.3 4.8 5.6 4.1c2-.4 4 .5 6.4 3 2.4-2.5 4.4-3.4 6.4-3 3.3.7 5.1 4.1 3.6 7.8-2.5 4.5-10 9.1-10 9.1z"/></svg>
+      <div
+        class="card-photo"
+        data-idx="0"
+        data-count="${images.length}"
+      >
+
+        <div class="track">
+          ${imgs}
+        </div>
+
+        ${
+          p.vibe
+            ? `<span class="vibe-tag">${p.vibe}</span>`
+            : ""
+        }
+
+        ${
+          images.length > 1
+            ? `
+              <button
+                class="card-arrow left"
+                aria-label="Previous photo"
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#5A3B2E"
+                  stroke-width="2"
+                >
+                  <path d="M15 6l-6 6 6 6"/>
+                </svg>
+              </button>
+
+              <button
+                class="card-arrow right"
+                aria-label="Next photo"
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#5A3B2E"
+                  stroke-width="2"
+                >
+                  <path d="M9 6l6 6-6 6"/>
+                </svg>
+              </button>
+
+              <div class="card-dots">
+                ${dots}
+              </div>
+            `
+            : ""
+        }
+
+        <button
+          class="fav-btn ${p.isFavorited ? "active" : ""}"
+          aria-label="Save to wishlist"
+        >
+          <svg viewBox="0 0 24 24">
+            <path d="M12 21s-7.5-4.6-10-9.1C.5 8.2 2.3 4.8 5.6 4.1c2-.4 4 .5 6.4 3 2.4-2.5 4.4-3.4 6.4-3 3.3.7 5.1 4.1 3.6 7.8-2.5 4.5-10 9.1-10 9.1z"/>
+          </svg>
         </button>
       </div>
+
       <div class="card-top">
-        <span class="card-title">${p.title}</span>
+        <span class="card-title">
+          ${p.title || ""}
+        </span>
+
         <span class="card-rating">
-          <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6L21 9.3l-5 4.6 1.3 6.8L12 17.3 6.7 20.7 8 13.9 3 9.3l6.1-.7z"/></svg>
-          ${p.rating.toFixed(2)}
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2l2.9 6.6L21 9.3l-5 4.6 1.3 6.8L12 17.3 6.7 20.7 8 13.9 3 9.3l6.1-.7z"/>
+          </svg>
+          ${Number(p.rating || 0).toFixed(2)}
         </span>
       </div>
-      <p class="card-loc">${p.loc}</p>
-      <p class="card-dates">${p.dates}</p>
-      <p class="card-price"><b>$${p.price}</b> / night</p>
+
+      <p class="card-loc">
+        ${location}
+      </p>
+
+      <p class="card-price">
+        <b>${p.currency || "€"}${Number(p.price || 0).toLocaleString()}</b>
+        / night
+      </p>
     </div>
   `;
 }
-function pinHTML(p){ return `<div class="pin" data-id="${p.id}" style="top:${p.top};left:${p.left};">$${p.price}</div>`; }
 
-function render(){
-  const list = sorted(filtered());
-  resultsCount.textContent = list.length ? `${list.length} stays` : '';
-  resultsQuip.textContent = list.length ? quips[Math.floor(Math.random()*quips.length)] : '';
-  if(!list.length){ resultGrid.style.display = 'none'; noResults.style.display = 'block'; }
-  else { resultGrid.style.display = 'grid'; noResults.style.display = 'none'; }
-  resultGrid.innerHTML = list.map(cardHTML).join('');
+function pinHTML(p) {
+  return `
+    <div
+      class="pin"
+      data-id="${p.id}"
+      style="top:${p.top};left:${p.left};"
+    >
+      ${p.currency || "€"}${Number(p.price || 0).toLocaleString()}
+    </div>
+  `;
+}
 
-  const existingPins = mapWrap.querySelectorAll('.pin');
-  existingPins.forEach(el=> el.classList.add('fading'));
-  setTimeout(()=>{ existingPins.forEach(el=>el.remove()); }, existingPins.length ? 200 : 0);
-  setTimeout(()=>{
-    list.forEach(p=>{
-      const el = document.createElement('div');
-      el.innerHTML = pinHTML(p);
-      mapWrap.appendChild(el.firstElementChild);
-    });
-    attachPinEvents();
-  }, existingPins.length ? 210 : 0);
+function render(properties) {
+  const list = Array.isArray(properties) ? properties : [];
+
+  resultsCount.textContent = list.length ? `${list.length} stays` : "";
+  if (resultsQuip) {
+    resultsQuip.textContent = list.length
+      ? quips[Math.floor(Math.random() * quips.length)]
+      : "";
+  }
+
+  resultGrid.style.display = list.length ? "grid" : "none";
+  noResults.style.display = list.length ? "none" : "block";
+  resultGrid.innerHTML = list.map(cardHTML).join("");
+
+  mapWrap.querySelectorAll(".pin").forEach((pin) => pin.remove());
+  list.forEach((property) => {
+    mapWrap.insertAdjacentHTML("beforeend", pinHTML(property));
+  });
+  attachPinEvents();
 }
 
 function attachPinEvents(){
@@ -541,12 +765,14 @@ resultGrid.addEventListener('click', (e)=>{
   const card = e.target.closest('.card');
   if(fav){
     e.stopPropagation();
-    const id = Number(card.dataset.id);
-    const nowActive = !favorited.has(id);
-    favorited.has(id) ? favorited.delete(id) : favorited.add(id);
+    const id = card.dataset.id;
+    const nowActive = !fav.classList.contains('active');
     fav.classList.toggle('active');
     fav.classList.remove('pulse'); void fav.offsetWidth; fav.classList.add('pulse');
-    if(nowActive){ spawnSparkles(fav); showToast(toastMsgs[Math.floor(Math.random()*toastMsgs.length)]); }
+    fetch(`/wishlist/${id}`, { method: nowActive ? 'POST' : 'DELETE', headers: { Accept: 'application/json' } })
+      .then(response => { if (!response.ok) throw new Error('login required'); return response.json(); })
+      .then(() => { if(nowActive){ spawnSparkles(fav); showToast(toastMsgs[Math.floor(Math.random()*toastMsgs.length)]); } })
+      .catch(() => { fav.classList.toggle('active'); showToast('Log in to save stays'); });
     return;
   }
   if(arrow){
@@ -560,38 +786,51 @@ resultGrid.addEventListener('click', (e)=>{
     track.style.transform = `translateX(-${idx*100}%)`;
     photo.querySelectorAll('.card-dots span').forEach((d,i)=>d.classList.toggle('active', i===idx));
   }
+  if (card) window.location.href = `/properties/${card.dataset.id}`;
 });
 
 function closeAllPopovers(except){ document.querySelectorAll('.popover').forEach(p=>{ if(p.id!==except) p.classList.remove('open'); }); }
 document.querySelectorAll('.chip[data-pop]').forEach(chip=>{
-  chip.addEventListener('click', (e)=>{ e.stopPropagation(); const pop = document.getElementById(chip.dataset.pop); const isOpen = pop.classList.contains('open'); closeAllPopovers(); pop.classList.toggle('open', !isOpen); });
+  chip.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const pop = document.getElementById(chip.dataset.pop);
+    const isOpen = pop.classList.contains('open');
+    closeAllPopovers();
+    if (!isOpen) {
+      const rect = chip.getBoundingClientRect();
+      pop.style.left = `${Math.max(12, Math.min(rect.left, window.innerWidth - pop.offsetWidth - 12))}px`;
+      pop.style.top = `${rect.bottom + 10}px`;
+      pop.classList.add('open');
+    }
+  });
 });
 document.addEventListener('click', ()=> closeAllPopovers());
 document.querySelectorAll('.popover').forEach(p=>p.addEventListener('click', e=>e.stopPropagation()));
 
 const priceSlider = document.getElementById('priceSlider');
 const priceLabel = document.getElementById('priceLabel');
-priceSlider.addEventListener('input', ()=>{ priceLabel.textContent = priceSlider.value >= 400 ? 'up to $400+ / night' : `up to $${priceSlider.value} / night`; });
+priceSlider.addEventListener('input', ()=>{ priceLabel.textContent = priceSlider.value >= maxAvailablePrice ? `up to $${maxAvailablePrice}+ / night` : `up to $${priceSlider.value} / night`; });
 document.getElementById('priceApply').addEventListener('click', ()=>{
   state.price = Number(priceSlider.value);
-  document.getElementById('priceChip').classList.toggle('active', state.price < 400);
-  closeAllPopovers(); render();
+  document.getElementById('priceChip').classList.toggle('active', state.price < maxAvailablePrice);
+  closeAllPopovers(); loadProperties();
+;
 });
 document.getElementById('priceClear').addEventListener('click', ()=>{
-  priceSlider.value = 400; priceLabel.textContent = 'up to $400 / night'; state.price = 400;
-  document.getElementById('priceChip').classList.remove('active'); render();
+  priceSlider.value = maxAvailablePrice; priceLabel.textContent = `up to $${maxAvailablePrice} / night`; state.price = null;
+  document.getElementById('priceChip').classList.remove('active'); loadProperties();
 });
 
 const typePop = document.getElementById('typePop');
 document.getElementById('typeApply').addEventListener('click', ()=>{
   state.types = new Set([...typePop.querySelectorAll('input:checked')].map(i=>i.value));
   document.getElementById('typeChip').classList.toggle('active', state.types.size>0);
-  closeAllPopovers(); render();
+  closeAllPopovers(); loadProperties();
 });
 document.getElementById('typeClear').addEventListener('click', ()=>{
   typePop.querySelectorAll('input').forEach(i=>i.checked=false);
   state.types = new Set();
-  document.getElementById('typeChip').classList.remove('active'); render();
+  document.getElementById('typeChip').classList.remove('active'); loadProperties();
 });
 document.getElementById('ratingChips').addEventListener('click', (e)=>{
   const btn = e.target.closest('.radio-chip'); if(!btn) return;
@@ -599,7 +838,7 @@ document.getElementById('ratingChips').addEventListener('click', (e)=>{
   btn.classList.add('selected');
   state.rating = Number(btn.dataset.val);
   document.getElementById('ratingChip').classList.toggle('active', state.rating>0);
-  render();
+  loadProperties();
 });
 
 const sortBtn = document.getElementById('sortBtn');
@@ -611,16 +850,43 @@ sortMenu.addEventListener('click', (e)=>{
   sortKey = opt.dataset.sort;
   document.getElementById('sortLabel').textContent = opt.textContent;
   document.querySelectorAll('.sort-option').forEach(o=>o.classList.remove('selected'));
-  opt.classList.add('selected'); render();
+  opt.classList.add('selected'); loadProperties();
 });
 
-function clearAll(){
-  state = {price:400, types:new Set(), rating:0};
-  priceSlider.value = 400; priceLabel.textContent = 'up to $400 / night';
-  typePop.querySelectorAll('input').forEach(i=>i.checked=false);
-  document.querySelectorAll('#ratingChips .radio-chip').forEach((b,i)=>b.classList.toggle('selected', i===0));
-  document.querySelectorAll('.chip.active').forEach(c=>c.classList.remove('active'));
-  render();
+function clearAll() {
+  state = {
+    price: null,
+    types: new Set(),
+    rating: 0,
+    bedrooms: 0,
+    beds: 0,
+    bathrooms: 0,
+    amenities: new Set(),
+    instantBook: false,
+    selfCheckIn: false,
+    stepFreeEntrance: false,
+    wideDoorways: false,
+    hostStatus: null
+  };
+
+  priceSlider.value = priceSlider.max;
+  priceLabel.textContent = `up to $${priceSlider.max} / night`;
+
+  typePop
+    .querySelectorAll("input")
+    .forEach(input => input.checked = false);
+
+  document
+    .querySelectorAll("#ratingChips .radio-chip")
+    .forEach((button, index) => {
+      button.classList.toggle("selected", index === 0);
+    });
+
+  document
+    .querySelectorAll(".chip.active")
+    .forEach(chip => chip.classList.remove("active"));
+
+  loadProperties();
 }
 document.getElementById('suggestClear').addEventListener('click', clearAll);
 document.getElementById('suggestNearby').addEventListener('click', clearAll);
@@ -628,15 +894,26 @@ document.getElementById('suggestDates').addEventListener('click', clearAll);
 
 const drawer = document.getElementById('drawer');
 const drawerOverlay = document.getElementById('drawerOverlay');
-function openDrawer(){ drawer.classList.add('open'); drawerOverlay.classList.add('open'); }
+function openDrawer(sectionId){
+  drawer.classList.add('open');
+  drawerOverlay.classList.add('open');
+  if (sectionId) {
+    requestAnimationFrame(() => {
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+}
 function closeDrawer(){ drawer.classList.remove('open'); drawerOverlay.classList.remove('open'); }
 document.getElementById('allFiltersBtn').addEventListener('click', openDrawer);
+document.getElementById('bedroomsChip').addEventListener('click', () => openDrawer('roomsFilterSection'));
+document.getElementById('amenitiesChip').addEventListener('click', () => openDrawer('amenitiesFilterSection'));
+document.getElementById('accessibilityChip').addEventListener('click', () => openDrawer('accessibilityFilterSection'));
 document.getElementById('drawerClose').addEventListener('click', closeDrawer);
 drawerOverlay.addEventListener('click', closeDrawer);
 
 const drawerSlider = document.getElementById('drawerPriceSlider');
 const drawerPriceLabel = document.getElementById('drawerPriceLabel');
-drawerSlider.addEventListener('input', ()=>{ drawerPriceLabel.textContent = drawerSlider.value >= 400 ? 'up to $400+ / night' : `up to $${drawerSlider.value} / night`; });
+drawerSlider.addEventListener('input', ()=>{ drawerPriceLabel.textContent = drawerSlider.value >= maxAvailablePrice ? `up to $${maxAvailablePrice}+ / night` : `up to $${drawerSlider.value} / night`; });
 document.querySelectorAll('.stepper button').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     const targetId = {bed:'bedVal', beds:'bedsVal', bath:'bathVal'}[btn.dataset.t];
@@ -651,19 +928,34 @@ document.getElementById('drawerApply').addEventListener('click', ()=>{
   state.price = Number(drawerSlider.value);
   priceSlider.value = drawerSlider.value;
   priceLabel.textContent = drawerPriceLabel.textContent;
-  document.getElementById('priceChip').classList.toggle('active', state.price < 400);
+  document.getElementById('priceChip').classList.toggle('active', state.price < maxAvailablePrice);
   const checked = [...document.getElementById('drawerTypeGrid').querySelectorAll('input:checked')].map(i=>i.value);
   state.types = new Set(checked);
+  state.amenities = new Set([...document.getElementById('drawerAmenityGrid').querySelectorAll('input:checked')].map(i=>i.value));
+  state.bedrooms = Number(document.getElementById('bedVal').textContent === 'Any' ? 0 : document.getElementById('bedVal').textContent);
+  state.beds = Number(document.getElementById('bedsVal').textContent === 'Any' ? 0 : document.getElementById('bedsVal').textContent);
+  state.bathrooms = Number(document.getElementById('bathVal').textContent === 'Any' ? 0 : document.getElementById('bathVal').textContent);
+  const switches = [...document.querySelectorAll('[data-switch]')].map(sw => sw.classList.contains('on'));
+  [state.instantBook, state.selfCheckIn, state.stepFreeEntrance, state.wideDoorways] = switches;
+  const selectedHost = document.querySelector('[data-host].selected');
+  state.hostStatus = selectedHost?.dataset.host || null;
   typePop.querySelectorAll('input').forEach(i=>{ i.checked = checked.includes(i.value); });
   document.getElementById('typeChip').classList.toggle('active', state.types.size>0);
-  closeDrawer(); render();
+  closeDrawer(); loadProperties();
 });
 document.getElementById('drawerClear').addEventListener('click', ()=>{
-  drawerSlider.value = 400; drawerPriceLabel.textContent = 'up to $400 / night';
+  drawerSlider.value = maxAvailablePrice; drawerPriceLabel.textContent = `up to $${maxAvailablePrice} / night`;
   document.getElementById('drawerTypeGrid').querySelectorAll('input').forEach(i=>i.checked=false);
+  document.getElementById('drawerAmenityGrid').querySelectorAll('input').forEach(i=>i.checked=false);
   document.querySelectorAll('.stepper span').forEach(s=>s.textContent='Any');
   document.querySelectorAll('[data-switch]').forEach(sw=>sw.classList.remove('on'));
+  document.querySelectorAll('[data-host]').forEach((button, index)=>button.classList.toggle('selected', index === 0));
+  clearAll();
 });
+document.querySelectorAll('[data-host]').forEach(button => button.addEventListener('click', () => {
+  document.querySelectorAll('[data-host]').forEach(item => item.classList.remove('selected'));
+  button.classList.add('selected');
+}));
 
 const mapCol = document.getElementById('mapCol');
 const mapToggleBtn = document.getElementById('mapToggleBtn');
@@ -671,20 +963,8 @@ const mapClose = document.getElementById('mapClose');
 mapToggleBtn.addEventListener('click', ()=>{ mapCol.classList.add('show'); mapClose.classList.add('show'); });
 mapClose.addEventListener('click', ()=>{ mapCol.classList.remove('show'); mapClose.classList.remove('show'); });
 
-render();
+loadProperties();
 
 
 
-    let taxSwitch = document.getElementById("switchCheckDefault");
-    taxSwitch.addEventListener("click", ()=>{
-     let taxInfo = document.getElementsByClassName("tax-info");
-     for(info of taxInfo){
-        if(info.style.display!="inline"){
-            info.style.display="inline";
-        }else{
-            info.style.display="none";
-        }
-        
-     }
-    });
 </script>

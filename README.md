@@ -1,6 +1,6 @@
 # StayEase - Rental Listing Platform(Airbnb Clone)
 
-Live Demo: [https://item-manager-psi.vercel.app/](https://stayease-smsm.onrender.com/listings)
+Live Demo: [https://item-manager-psi.vercel.app/](https://stayease-smsm.onrender.com/properties)
 
 **StayEase** is a web application that allows users to browse, create, and manage listings for accommodations such as hotels or rental properties. Users can also leave reviews, filter listings, and search by location. The platform includes user authentication and provides an intuitive, responsive interface.
 
@@ -17,19 +17,16 @@ Live Demo: [https://item-manager-psi.vercel.app/](https://stayease-smsm.onrender
 ## 🛠 Technologies Used
 
 - **Backend**:
-
   - Node.js with Express.js for server-side logic and routing
   - MongoDB for database, with Mongoose for schema modeling
   - Handlebars (or EJS) for server-side rendering
 
 - **Frontend**:
-
   - Bootstrap 5 for layout and responsive design
   - Custom CSS for additional styling
   - FontAwesome for icons
 
 - **Authentication**:
-
   - Session-based authentication with secure login and registration
 
 ## 🚀 Setup and Installation

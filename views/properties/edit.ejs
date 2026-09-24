@@ -1,11 +1,12 @@
 <% layout("/layouts/boilerplate") %>
 
 <title>Edit Listing | StayEase</title>
-</head>
-<div class="container my-5">
-    <h2 class="mb-4">Edit Listing</h2>
+<div class="container my-5 form-page">
+    <p class="form-eyebrow">your place, your details</p>
+    <h1 class="form-title">Edit your stay</h1>
+    <p class="form-intro">Keep your listing accurate so guests know exactly what to expect.</p>
 
-    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+    <form action="/properties/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
             <input type="text" name="listing[title]" id="title" value="<%= listing.title %>" class="form-control" required>
@@ -29,14 +30,16 @@
 
         <div class="mb-3">
             <label for="location" class="form-label">Location</label>
-            <input type="text" name="listing[location]" id="location" value="<%= listing.location %>" class="form-control" required>
+            <input type="text" name="listing[location][city]" id="location" value="<%= listing.location?.city || '' %>" class="form-control" required>
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Please provide a location.</div>
         </div>
 
         <div class="mb-4">
-            <label class="form-label">Current Image</label><br>
-            <img src="<%= originalImageUrl %>" alt="Current Listing Image" class="img-fluid rounded mb-2" style="max-width: 300px;">
+            <label for="country" class="form-label">Country</label>
+            <input type="text" name="listing[location][country]" id="country" value="<%= listing.location?.country || '' %>" class="form-control mb-3" required>
+            <label class="form-label">Current image</label><br>
+            <% if (listing.images?.length) { %><img src="<%= listing.images[0] %>" alt="Current listing" class="img-fluid rounded mb-2" style="max-width: 300px;"><% } %>
         </div>
 
         <div class="mb-3">
@@ -45,10 +48,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Update Listing</button>
-        <a href="/listings/<%= listing._id %>" class="btn btn-outline-secondary ms-2">Back to Listing</a>
+        <a href="/properties/<%= listing._id %>" class="btn btn-outline-secondary ms-2">Back to Listing</a>
     </form>
-
-    <script src="/js/formValidation.js"></script>
 </div>
-</html>
     

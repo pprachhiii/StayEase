@@ -81,10 +81,10 @@
     <h1 class="auth-title">Create your account</h1>
 
     <form id="signupForm" action="/register" method="POST" novalidate>
-      <div class="field" id="usernameField">
-        <label for="username">Username</label>
-        <input id="username" type="text" name="username" class="form-control" placeholder="Enter username" required>
-        <p class="field-error">Please enter a valid username.</p>
+      <div class="field" id="emailField">
+        <label for="email">Email address</label>
+        <input id="email" type="email" name="email" class="form-control" placeholder="name@example.com" required>
+        <p class="field-error">Please enter a valid email address.</p>
       </div>
 
       <div class="field" id="passwordField">
@@ -172,12 +172,12 @@ document.getElementById('signupForm').addEventListener('submit', function(e){
   e.preventDefault();
   let valid = true;
 
-  const usernameInput = document.getElementById('username');
-  const usernameField = document.getElementById('usernameField');
-  const usernameOk = usernameInput.value.trim().length > 0;
-  usernameField.classList.toggle('has-error', !usernameOk);
-  usernameInput.classList.toggle('error', !usernameOk);
-  if(!usernameOk) valid = false;
+  const emailInput = document.getElementById('email');
+  const emailField = document.getElementById('emailField');
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim());
+  emailField.classList.toggle('has-error', !emailOk);
+  emailInput.classList.toggle('error', !emailOk);
+  if(!emailOk) valid = false;
 
   const pwInput = document.getElementById('password');
   const pwField = document.getElementById('passwordField');
@@ -195,7 +195,7 @@ document.getElementById('signupForm').addEventListener('submit', function(e){
   }
 
   submitBtn.textContent = 'Creating account…';
-  setTimeout(()=>{ submitBtn.textContent = 'Welcome aboard! (demo)'; }, 900);
+  this.submit();
 });
 </script>
 </body>

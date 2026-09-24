@@ -16,7 +16,6 @@ const User = require("./models/user");
 
 // Route files (FIXED Duplicate Declaration)
 const homeRoutes = require("./routes/home");
-const listingRoutes = require("./routes/listings");
 const reviewRoutes = require("./routes/reviews");
 const authRoutes = require("./routes/auth");
 const propertyRoutes = require("./routes/property");
@@ -27,6 +26,11 @@ const errorMiddleware = require("./middleware/error");
 // Connect to MongoDB
 async function main() {
   await mongoose.connect(process.env.MONGO_URI);
+  const userIndexes = await User.collection.indexes();
+  if (userIndexes.some((index) => index.name === "username_1")) {
+    await User.collection.dropIndex("username_1");
+    console.log("Removed obsolete username index from users collection");
+  }
 }
 main()
   .then(() => console.log("✅ MongoDB connected"))
@@ -67,7 +71,9 @@ app.use(flash());
 // Passport configuration
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use(
+  new LocalStrategy({ usernameField: "email" }, User.authenticate()),
+);
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -81,10 +87,9 @@ app.use((req, res, next) => {
 
 // Routes (FIXED Mounting)
 app.use("/", homeRoutes); // Mounts home routes (e.g., handles '/' or '/home')
-app.use("/listings", listingRoutes);
-app.use("/listings/:id/reviews", reviewRoutes);
 app.use("/", authRoutes);
 app.use("/properties", propertyRoutes);
+app.use("/properties/:id/reviews", reviewRoutes);
 
 app.use("/wishlist", wishlistRoutes);
 
